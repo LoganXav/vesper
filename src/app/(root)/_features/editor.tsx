@@ -1,9 +1,9 @@
 "use client";
 
 import "@/styles/editor.css";
+import { EditorControls } from "./editor-controls";
 import { useEffect, useRef, useState } from "react";
 import { Editor, JSONContent } from "@tiptap/react";
-import { EditorInterfaceControls } from "./editor-interface-controls";
 
 import { Markdown } from "tiptap-markdown";
 import StarterKit from "@tiptap/starter-kit";
@@ -19,6 +19,7 @@ import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
 const EditorInterface = () => {
   const [editor, setEditor] = useState<Editor | null>(null);
   const editorRef = useRef<Editor | null>(null);
+
   const [isEditable, setIsEditable] = useState(true);
 
   const [initialContent, setInitialContent] = useState<null | JSONContent>(
@@ -38,7 +39,7 @@ const EditorInterface = () => {
     );
     window.localStorage.setItem(
       "vesper-markdown",
-      editor.storage.markdown.getMarkdown()
+      editor.storage.markdown.getMarkdown() as string
     );
 
     setSaveStatus("Saved");
@@ -94,6 +95,7 @@ const EditorInterface = () => {
     }),
   ];
 
+  // Set initial content from local storage on page load.
   useEffect(() => {
     const content = window.localStorage.getItem("vesper-structured-content");
 
@@ -107,53 +109,58 @@ const EditorInterface = () => {
   if (!initialContent) return null;
 
   return (
-    <div className="group relative h-full p-0 lg:px-10">
-      <div className="fixed right-3 top-1/2 z-30 -translate-y-1/2 opacity-0 translate-x-4 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto">
-        {editor && (
-          <EditorInterfaceControls
-            editor={editor}
-            isEditable={isEditable}
-            setIsEditable={setIsEditable}
-          />
-        )}
-      </div>
-
-      <div className="sticky top-[10px] right-5 z-10 mb-5 flex justify-end gap-2 opacity-0 -translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
-        <div className="rounded-xl bg-secondary px-2 py-1 text-xs text-secondary-foreground">
-          {saveStatus}
+    <>
+      <div className="p-0 lg:px-10 relative">
+        {/* Floating editor controls */}
+        <div className="fixed z-30 right-3 top-1/2 -translate-y-1/2">
+          {editor && (
+            <EditorControls
+              editor={editor}
+              isEditable={isEditable}
+              setIsEditable={setIsEditable}
+            />
+          )}
         </div>
-        {charsCount > 0 && (
-          <div className="rounded-xl bg-secondary px-2 py-1 text-xs text-secondary-foreground">
-            {charsCount} Words
+
+        {/* Counts */}
+        <div className="flex justify-end sticky right-5 top-[1px] z-10 mb-5 gap-2">
+          <div className="rounded-xl bg-secondary text-secondary-foreground px-2 py-1 text-xs">
+            {saveStatus}
           </div>
+          {charsCount > 0 && (
+            <div className="rounded-xl bg-secondary text-secondary-foreground px-2 py-1 text-xs">
+              {charsCount} Words
+            </div>
+          )}
+        </div>
+
+        {/* Main editor area */}
+        {editor && (
+          <DragHandle editor={editor}>
+            <GripVerticalIcon strokeWidth={1} />
+          </DragHandle>
         )}
+
+        <EditorContent
+          className="tiptap text-foreground"
+          immediatelyRender={false}
+          editable={true}
+          onCreate={({ editor }) => {
+            migrateMathStrings(editor);
+            setEditor(editor);
+          }}
+          onUpdate={({ editor }) => {
+            debouncedUpdates(editor);
+            setSaveStatus("Unsaved");
+          }}
+          onDestroy={() => {
+            setEditor(null);
+          }}
+          initialContent={initialContent}
+          extensions={extensions}
+        ></EditorContent>
       </div>
-
-      {editor && (
-        <DragHandle editor={editor}>
-          <GripVerticalIcon strokeWidth={1} />
-        </DragHandle>
-      )}
-
-      <EditorContent
-        className="tiptap text-foreground"
-        immediatelyRender={false}
-        editable={true}
-        onCreate={({ editor }) => {
-          migrateMathStrings(editor);
-          setEditor(editor);
-        }}
-        onUpdate={({ editor }) => {
-          debouncedUpdates(editor);
-          setSaveStatus("Unsaved");
-        }}
-        onDestroy={() => {
-          setEditor(null);
-        }}
-        initialContent={initialContent}
-        extensions={extensions}
-      />
-    </div>
+    </>
   );
 };
 
