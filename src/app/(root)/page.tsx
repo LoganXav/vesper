@@ -10,23 +10,21 @@ import {
   DialogTrigger,
   DialogTitle,
 } from "@/components/ui/dialog";
+import EditorInterface from "./_features/editor-interface";
 
 export default function Home() {
   const { isMobile } = useIsMobile();
 
   return (
     <div className="relative h-screen grid grid-cols-1 lg:grid-cols-4">
-      {/* Chat Panel - Desktop */}
       <div className="hidden lg:flex border-r border-border bg-card h-full">
         <ChatInterface />
       </div>
 
-      {/* Editor Panel */}
       <div className="lg:col-span-3 bg-background p-8 h-full">
-        <span className="text-muted-foreground">Editor</span>
+        <EditorInterface />
       </div>
 
-      {/* Chat Dialog - Mobile */}
       {isMobile && (
         <div className="fixed bottom-4 right-4 z-50">
           <Dialog>
