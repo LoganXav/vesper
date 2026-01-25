@@ -17,11 +17,11 @@ export default function Home() {
 
   return (
     <div className="relative h-screen grid grid-cols-1 lg:grid-cols-4">
-      <div className="hidden lg:flex border-r border-border bg-card h-full">
+      <div className="hidden lg:flex h-full border-r border-border bg-card">
         <ChatInterface />
       </div>
 
-      <div className="lg:col-span-3 bg-background p-8 h-full">
+      <div className="lg:col-span-3 h-full overflow-y-auto bg-background p-0">
         <EditorInterface />
       </div>
 

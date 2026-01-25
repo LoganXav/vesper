@@ -23,7 +23,7 @@ export default function ChatInterfaceConversation({
           className={cn(
             "relative w-fit max-w-[85%] px-4 py-2 rounded-2xl transition-all duration-200",
             msg.role === "user"
-              ? "ml-auto bg-primary text-primary-foreground rounded-br-md"
+              ? "ml-auto bg-secondary text-secondary-foreground rounded-br-md"
               : "mr-auto bg-muted text-foreground rounded-bl-md"
           )}
         >

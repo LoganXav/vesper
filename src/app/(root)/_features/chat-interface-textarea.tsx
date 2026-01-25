@@ -1,9 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Link2Icon, SendHorizontalIcon, Loader2Icon } from "lucide-react";
+import {
+  PlusIcon,
+  Link2Icon,
+  SparklesIcon,
+  SendHorizontalIcon,
+  Loader2Icon,
+} from "lucide-react";
 
 interface Props {
   onSend: ({
@@ -16,8 +23,14 @@ interface Props {
   isSending?: boolean;
 }
 
+const actions = [
+  { icon: Link2Icon, label: "Reference book" },
+  { icon: SparklesIcon, label: "Generate" },
+];
+
 export const ChatInterfaceTextArea = ({ onSend, isSending }: Props) => {
   const [message, setMessage] = useState("");
+  const [isActionsOpen, setIsActionsOpen] = useState(false);
 
   const handleSend = async () => {
     if (!message.trim()) return;
@@ -38,7 +51,7 @@ export const ChatInterfaceTextArea = ({ onSend, isSending }: Props) => {
 
   return (
     <div className="space-y-3">
-      <div className="border border-border w-full bg-input p-2 rounded-xl space-y-4">
+      <div className="border border-border w-full bg-input p-2 rounded-xl space-y-2">
         <Textarea
           placeholder="Type your message..."
           value={message}
@@ -47,21 +60,54 @@ export const ChatInterfaceTextArea = ({ onSend, isSending }: Props) => {
           }
           onKeyDown={onKeyDown}
           disabled={isSending}
-          className="text-sm resize-none min-h-[60px] border-0 bg-transparent focus-visible:ring-0 p-3 shadow-none"
+          className="text-sm resize-none max-h-[150px] border-0 bg-transparent focus-visible:ring-0 p-3 shadow-none"
         />
 
-        <div className="w-full flex justify-between items-center">
-          <Button
-            className="rounded-full text-xs"
-            size="sm"
-            variant="ghost"
-            // disabled={true}
-          >
-            <Link2Icon size={16} /> Reference Book
-          </Button>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1">
+            <Button
+              type="button"
+              size="icon"
+              variant="ghost"
+              className="h-8 w-8 shrink-0 rounded-full border border-border"
+              onClick={() => setIsActionsOpen(!isActionsOpen)}
+            >
+              <div
+                className={cn(
+                  "transition-transform duration-300",
+                  isActionsOpen && "rotate-[135deg]"
+                )}
+              >
+                <PlusIcon size={16} />
+              </div>
+            </Button>
+
+            <div
+              className={cn(
+                "flex items-center gap-1 overflow-hidden transition-all duration-300 ease-out",
+                isActionsOpen
+                  ? "max-w-[500px] opacity-100"
+                  : "max-w-0 opacity-0"
+              )}
+            >
+              {actions.map((action) => (
+                <Button
+                  key={action.label}
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  className="h-7 shrink-0 rounded-full text-xs border border-border"
+                >
+                  <action.icon size={12} />
+                  {action.label}
+                </Button>
+              ))}
+            </div>
+          </div>
 
           <Button
-            className="rounded-md w-10 h-8"
+            className="h-8 w-8 shrink-0 rounded-full"
+            size="icon"
             onClick={handleSend}
             disabled={isSending}
           >

@@ -90,12 +90,12 @@ export const EditorInterfaceControls = ({
   };
 
   const btnStyle =
-    "px-2 py-1 rounded text-sm cursor-pointer hover:bg-accent flex justify-center transition-colors";
+    "px-1 py-1 rounded text-sm cursor-pointer hover:bg-accent flex justify-center transition-colors";
 
   const active = (is: boolean) => (is ? "bg-accent" : "");
 
   return (
-    <div className="bg-card border border-border rounded-lg p-1.5 toolbar gap-4 ml-3 flex flex-col relative">
+    <div className="bg-card border border-border rounded-lg py-3 px-1.5 toolbar gap-3 ml-3 flex flex-col relative">
       {/* Lock / Edit toggle */}
       <button
         type="button"
@@ -103,9 +103,9 @@ export const EditorInterfaceControls = ({
         onClick={toggleEditable}
       >
         {!isEditable ? (
-          <FileLock2Icon size={18} strokeWidth={1} />
+          <FileLock2Icon size={16} strokeWidth={1} />
         ) : (
-          <FilePenLineIcon size={18} strokeWidth={1} />
+          <FilePenLineIcon size={16} strokeWidth={1} />
         )}
       </button>
 
@@ -117,7 +117,7 @@ export const EditorInterfaceControls = ({
         className={`${btnStyle} ${active(editor.isActive("bold"))}`}
         onClick={() => editor.chain().focus().toggleBold().run()}
       >
-        <BoldIcon size={18} strokeWidth={1} />
+        <BoldIcon size={16} strokeWidth={1} />
       </button>
 
       <button
@@ -125,7 +125,7 @@ export const EditorInterfaceControls = ({
         className={`${btnStyle} ${active(editor.isActive("italic"))}`}
         onClick={() => editor.chain().focus().toggleItalic().run()}
       >
-        <ItalicIcon size={18} strokeWidth={1} />
+        <ItalicIcon size={16} strokeWidth={1} />
       </button>
 
       <button
@@ -135,7 +135,7 @@ export const EditorInterfaceControls = ({
         )}`}
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
       >
-        <Heading1Icon size={18} strokeWidth={1} />
+        <Heading1Icon size={16} strokeWidth={1} />
       </button>
 
       <button
@@ -145,7 +145,7 @@ export const EditorInterfaceControls = ({
         )}`}
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
       >
-        <Heading2Icon size={18} strokeWidth={1} />
+        <Heading2Icon size={16} strokeWidth={1} />
       </button>
 
       <button
@@ -155,7 +155,7 @@ export const EditorInterfaceControls = ({
         )}`}
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
       >
-        <Heading3Icon size={18} strokeWidth={1} />
+        <Heading3Icon size={16} strokeWidth={1} />
       </button>
 
       <button
@@ -163,7 +163,7 @@ export const EditorInterfaceControls = ({
         className={`${btnStyle} ${active(editor.isActive("bulletList"))}`}
         onClick={() => editor.chain().focus().toggleBulletList().run()}
       >
-        <ListIcon size={18} strokeWidth={1} />
+        <ListIcon size={16} strokeWidth={1} />
       </button>
 
       <button
@@ -171,7 +171,7 @@ export const EditorInterfaceControls = ({
         className={`${btnStyle} ${active(editor.isActive("orderedList"))}`}
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
       >
-        <ListOrderedIcon size={18} strokeWidth={1} />
+        <ListOrderedIcon size={16} strokeWidth={1} />
       </button>
 
       <hr className="border-border" />
@@ -182,14 +182,14 @@ export const EditorInterfaceControls = ({
         className={btnStyle}
         onClick={() => editor.chain().focus().undo().run()}
       >
-        <Undo2Icon size={18} strokeWidth={1} />
+        <Undo2Icon size={16} strokeWidth={1} />
       </button>
       <button
         type="button"
         className={btnStyle}
         onClick={() => editor.chain().focus().redo().run()}
       >
-        <Redo2Icon size={18} strokeWidth={1} />
+        <Redo2Icon size={16} strokeWidth={1} />
       </button>
 
       <hr className="border-border" />

@@ -107,8 +107,8 @@ const EditorInterface = () => {
   if (!initialContent) return null;
 
   return (
-    <div className="group relative h-full p-0 lg:px-10">
-      <div className="fixed right-3 top-1/2 z-30 -translate-y-1/2 opacity-0 translate-x-4 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto">
+    <div className="group relative h-full lg:px-16">
+      <div className="fixed right-5 top-1/2 z-30 -translate-y-1/2 opacity-0 translate-x-4 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto">
         {editor && (
           <EditorInterfaceControls
             editor={editor}
