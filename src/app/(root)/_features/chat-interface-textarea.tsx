@@ -50,7 +50,7 @@ export const ChatInterfaceTextArea = ({ onSend, isSending }: Props) => {
   };
 
   return (
-    <div className="space-y-3">
+    <div>
       <div className="border border-border w-full bg-input p-2 rounded-xl space-y-2">
         <Textarea
           placeholder="Type your message..."
@@ -119,13 +119,6 @@ export const ChatInterfaceTextArea = ({ onSend, isSending }: Props) => {
           </Button>
         </div>
       </div>
-
-      <p className="text-center text-xs text-muted-foreground">
-        Powered by Vesper AI. Built by{" "}
-        <span className="underline underline-offset-2 cursor-pointer hover:text-foreground transition-colors">
-          Logan
-        </span>
-      </p>
     </div>
   );
 };
