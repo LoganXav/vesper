@@ -21,7 +21,7 @@ export const ChatInterface = () => {
         />
       </div>
 
-      <div className="py-6 px-3 pt-0 space-y-1">
+      <div className="py-6 xl:px-6 px-3 pt-0 space-y-1">
         <ChatInterfaceTextArea onSend={sendMessage} isSending={isSending} />
 
         <p className="text-center text-xs text-muted-foreground mt-2">

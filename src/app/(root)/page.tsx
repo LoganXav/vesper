@@ -42,7 +42,7 @@ export default function Home() {
             <div className="fixed bottom-4 right-4 z-50">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className="rounded-full lg:hidden" variant="outline">
+                  <Button className="rounded-full xl:hidden" variant="outline">
                     Chat with AI
                   </Button>
                 </DialogTrigger>
