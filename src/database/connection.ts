@@ -3,6 +3,6 @@ import { config } from "@/config";
 import * as schema from "@/database/schema";
 import { drizzle } from "drizzle-orm/postgres-js";
 
-const client = postgres(config.databaseUrl, { prepare: false });
+const pool = postgres(config.databaseUrl, { max: 1 });
 
-export const database = drizzle(client, { schema });
+export const database = drizzle(pool);

@@ -1,17 +1,41 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { signIn, useSession } from "next-auth/react";
 import { GoogleIcon } from "@/lib/icons";
+import { useTransition } from "react";
+import { Loader2 } from "lucide-react";
 
 export const ChatInterfaceSignInCard = () => {
+  const [isPending, startTransition] = useTransition();
+  const handleSignIn = async () => {
+    startTransition(async () => {
+      await signIn("google");
+    });
+  };
+
+  const { data: session } = useSession();
+
+  console.log(session);
+
+  if (session) {
+    return <p>You are signed in, welcome!</p>;
+  }
+
   return (
     <div>
       <Card className="shadow-none bg-input p-4">
         <div className="space-y-2">
           <div>Sign in to your account</div>
           <div>Sign in to your account to continue using the chat.</div>
-          <Button variant="outline" className="bg-transparent shadow-none">
+          <Button
+            onClick={handleSignIn}
+            variant="outline"
+            className="bg-transparent shadow-none w-full"
+            disabled={isPending}
+          >
             <GoogleIcon className="size-4" />
             Sign in with Google
+            {isPending && <Loader2 className="size-4 animate-spin" />}
           </Button>
         </div>
       </Card>
