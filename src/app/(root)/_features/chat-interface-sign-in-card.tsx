@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { GoogleIcon } from "@/lib/icons";
 import { useTransition } from "react";
 import { Loader2 } from "lucide-react";
@@ -12,14 +12,6 @@ export const ChatInterfaceSignInCard = () => {
       await signIn("google");
     });
   };
-
-  const { data: session } = useSession();
-
-  console.log(session);
-
-  if (session) {
-    return <p>You are signed in, welcome!</p>;
-  }
 
   return (
     <div>

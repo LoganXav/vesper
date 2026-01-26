@@ -95,8 +95,9 @@ export const EditorInterfaceControls = ({
   const active = (is: boolean) => (is ? "bg-accent" : "");
 
   return (
-    <div className="bg-card border border-border rounded-lg py-3 px-1.5 toolbar gap-3 ml-3 flex flex-col relative">
+    <div className="bg-secondary border border-border rounded-2xl py-1 px-1.5 toolbar gap-2 ml-3 flex relative w-max">
       {/* Lock / Edit toggle */}
+
       <button
         type="button"
         className={`${btnStyle} ${!isEditable ? "bg-accent" : ""}`}
@@ -109,7 +110,41 @@ export const EditorInterfaceControls = ({
         )}
       </button>
 
-      <hr className="border-border" />
+      {/* Math palette with manual hover submenu */}
+      <div
+        className="relative"
+        onMouseEnter={() => setMathOpen(true)}
+        onMouseLeave={() => setMathOpen(false)}
+      >
+        <button type="button" className={btnStyle}>
+          𝑓(x)
+        </button>
+
+        {mathOpen && (
+          <div className="min-w-max absolute top-7 -left-20 bg-popover border border-border rounded-lg p-2 grid grid-cols-3 gap-4 max-h-72 overflow-y-auto z-50 shadow-md scrollbar-none">
+            {mathExpressions.map((expr) => (
+              <div
+                key={expr.label}
+                className="rounded-md p-1 text-sm text-center hover:bg-accent cursor-pointer transition-colors"
+                onClick={() => insertMath(expr.latex)}
+              >
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: katex.renderToString(expr.latex, {
+                      throwOnError: false,
+                    }),
+                  }}
+                />
+                {expr.info && (
+                  <p className="text-[10px] text-muted-foreground mt-1 max-w-16">
+                    {expr.info}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* Text formatting */}
       <button
@@ -191,44 +226,6 @@ export const EditorInterfaceControls = ({
       >
         <Redo2Icon size={16} strokeWidth={1} />
       </button>
-
-      <hr className="border-border" />
-
-      {/* Math palette with manual hover submenu */}
-      <div
-        className="relative"
-        onMouseEnter={() => setMathOpen(true)}
-        onMouseLeave={() => setMathOpen(false)}
-      >
-        <button type="button" className={btnStyle}>
-          𝑓(x)
-        </button>
-
-        {mathOpen && (
-          <div className="absolute -top-8 right-9 bg-popover border border-border rounded-lg p-2 flex flex-col gap-1 max-h-72 overflow-y-auto z-50 shadow-md">
-            {mathExpressions.map((expr) => (
-              <div
-                key={expr.label}
-                className="px-3 py-2 rounded-md text-sm text-left hover:bg-accent cursor-pointer transition-colors"
-                onClick={() => insertMath(expr.latex)}
-              >
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: katex.renderToString(expr.latex, {
-                      throwOnError: false,
-                    }),
-                  }}
-                />
-                {expr.info && (
-                  <p className="text-[10px] text-muted-foreground mt-1">
-                    {expr.info}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
     </div>
   );
 };

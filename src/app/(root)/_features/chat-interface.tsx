@@ -2,14 +2,11 @@
 
 import { useChat } from "@/hooks/use-chat";
 import { ChatInterfaceTextArea } from "@/app/(root)/_features/chat-interface-textarea";
-import { ChatInterfaceSignInCard } from "@/app/(root)/_features/chat-interface-sign-in-card";
 import ChatInterfaceConversation from "@/app/(root)/_features/chat-interface-conversation";
 import { ChatInterfaceEmptyConversation } from "@/app/(root)/_features/chat-interface-empty-conversation";
 
 export const ChatInterface = () => {
   const { messages, sendMessage, isSending, setMessages } = useChat();
-
-  const isSignedIn = false;
 
   return (
     <div className="relative h-full w-full flex flex-col">
@@ -24,14 +21,10 @@ export const ChatInterface = () => {
         />
       </div>
 
-      <div className="py-6 px-3 pt-0 space-y-3">
-        {isSignedIn ? (
-          <ChatInterfaceTextArea onSend={sendMessage} isSending={isSending} />
-        ) : (
-          <ChatInterfaceSignInCard />
-        )}
+      <div className="py-6 px-3 pt-0 space-y-1">
+        <ChatInterfaceTextArea onSend={sendMessage} isSending={isSending} />
 
-        <p className="text-center text-xs text-muted-foreground">
+        <p className="text-center text-xs text-muted-foreground mt-2">
           Powered by Vesper AI. Built by{" "}
           <span className="underline underline-offset-2 cursor-pointer hover:text-foreground transition-colors">
             Logan

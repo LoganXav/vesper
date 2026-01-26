@@ -42,7 +42,7 @@ export const ChatInterfaceEmptyConversation = ({
           <button
             key={idx}
             onClick={() => onSendMessage(prompt)}
-            className="text-nowrap rounded-full text-sm px-4 py-2 bg-secondary hover:bg-accent text-secondary-foreground cursor-pointer transition-all duration-200"
+            className="text-nowrap rounded-full border border-border text-sm px-4 py-2 bg-secondary hover:bg-accent text-secondary-foreground cursor-pointer transition-all duration-200"
           >
             {prompt}
           </button>

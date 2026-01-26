@@ -11,7 +11,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
 import Math, { migrateMathStrings } from "@tiptap/extension-mathematics";
 
-import { GripVerticalIcon } from "lucide-react";
+import { FileCheckIcon, GripVerticalIcon, FileClockIcon } from "lucide-react";
 import { EditorContent } from "@/components/ui/editor";
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
@@ -24,7 +24,7 @@ const EditorInterface = () => {
   const [initialContent, setInitialContent] = useState<null | JSONContent>(
     null
   );
-  const [saveStatus, setSaveStatus] = useState("Saved");
+  const [isSaved, setIsSaved] = useState(false);
   const [charsCount, setCharsCount] = useState<number | undefined>(undefined);
 
   const debouncedUpdates = useDebouncedCallback((editor: Editor) => {
@@ -36,12 +36,17 @@ const EditorInterface = () => {
       "vesper-structured-content",
       JSON.stringify(json)
     );
-    window.localStorage.setItem(
-      "vesper-markdown",
-      editor.storage.markdown.getMarkdown()
-    );
+    const markdownStorage = (editor.storage as any).markdown as
+      | { getMarkdown: () => string }
+      | undefined;
+    if (markdownStorage) {
+      window.localStorage.setItem(
+        "vesper-markdown",
+        markdownStorage.getMarkdown()
+      );
+    }
 
-    setSaveStatus("Saved");
+    setIsSaved(true);
   }, 1500);
 
   useEffect(() => {
@@ -107,8 +112,8 @@ const EditorInterface = () => {
   if (!initialContent) return null;
 
   return (
-    <div className="group relative h-full py-8 lg:px-16">
-      <div className="fixed right-5 top-1/2 z-30 -translate-y-1/2 opacity-0 translate-x-4 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto">
+    <div className="group relative h-full xl:px-16">
+      <div className="sticky top-[10px] right-5 z-10 mb-5 flex justify-end gap-2 opacity-0 -translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
         {editor && (
           <EditorInterfaceControls
             editor={editor}
@@ -116,14 +121,11 @@ const EditorInterface = () => {
             setIsEditable={setIsEditable}
           />
         )}
-      </div>
-
-      <div className="sticky top-[10px] right-5 z-10 mb-5 flex justify-end gap-2 opacity-0 -translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
-        <div className="rounded-xl bg-secondary px-2 py-1 text-xs text-secondary-foreground">
-          {saveStatus}
+        <div className="rounded-full bg-secondary border border-border  flex items-center justify-center gap-1 px-2 py-1 text-xs text-secondary-foreground w-8 h-8">
+          {isSaved ? <FileCheckIcon size={16} /> : <FileClockIcon size={16} />}
         </div>
         {charsCount && (
-          <div className="rounded-xl bg-secondary px-2 py-1 text-xs text-secondary-foreground">
+          <div className="h-6 rounded-xl bg-secondary border border-border  px-2 py-1 text-xs text-secondary-foreground">
             {charsCount} Words
           </div>
         )}
@@ -145,7 +147,7 @@ const EditorInterface = () => {
         }}
         onUpdate={({ editor }) => {
           debouncedUpdates(editor);
-          setSaveStatus("Unsaved");
+          setIsSaved(false);
         }}
         onDestroy={() => {
           setEditor(null);
