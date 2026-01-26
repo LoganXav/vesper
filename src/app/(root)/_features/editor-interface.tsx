@@ -114,20 +114,20 @@ const EditorInterface = () => {
   return (
     <div className="group relative h-full xl:px-16">
       <div className="sticky top-[10px] right-5 z-10 mb-5 flex justify-end gap-2 opacity-0 -translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
+        {charsCount && (
+          <div className="h-6 rounded-xl bg-secondary border border-border  px-2 py-1 text-xs text-secondary-foreground">
+            {charsCount} Words
+          </div>
+        )}
+        <div className="rounded-full bg-secondary border border-border flex items-center justify-center gap-1 px-2 py-1 text-xs text-secondary-foreground w-8 h-8">
+          {isSaved ? <FileCheckIcon size={16} /> : <FileClockIcon size={16} />}
+        </div>
         {editor && (
           <EditorInterfaceControls
             editor={editor}
             isEditable={isEditable}
             setIsEditable={setIsEditable}
           />
-        )}
-        <div className="rounded-full bg-secondary border border-border  flex items-center justify-center gap-1 px-2 py-1 text-xs text-secondary-foreground w-8 h-8">
-          {isSaved ? <FileCheckIcon size={16} /> : <FileClockIcon size={16} />}
-        </div>
-        {charsCount && (
-          <div className="h-6 rounded-xl bg-secondary border border-border  px-2 py-1 text-xs text-secondary-foreground">
-            {charsCount} Words
-          </div>
         )}
       </div>
 

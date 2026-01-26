@@ -95,7 +95,7 @@ export const EditorInterfaceControls = ({
   const active = (is: boolean) => (is ? "bg-accent" : "");
 
   return (
-    <div className="bg-secondary border border-border rounded-2xl py-1 px-1.5 toolbar gap-2 ml-3 flex relative w-max">
+    <div className="bg-secondary border border-border rounded-2xl py-1 px-1.5 toolbar gap-2 flex relative w-max">
       {/* Lock / Edit toggle */}
 
       <button

@@ -76,7 +76,7 @@ export const ChatInterfaceTextArea = ({ onSend, isSending }: Props) => {
             type="button"
             size="icon"
             variant="ghost"
-            className="h-8 w-8 shrink-0 rounded-full border border-border"
+            className="h-8 w-8 shrink-0 rounded-full"
             onClick={() => setIsActionsOpen(!isActionsOpen)}
           >
             <div
