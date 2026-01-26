@@ -21,13 +21,13 @@ export default function ChatInterfaceConversation({
         <div
           key={msg.id}
           className={cn(
-            "relative w-fit max-w-[85%] px-4 py-2 rounded-2xl transition-all duration-200",
+            "relative w-fit max-w-[85%] min-w-0 px-4 py-2 rounded-2xl transition-all duration-200 break-words",
             msg.role === "user"
               ? "ml-auto bg-secondary text-secondary-foreground rounded-br-md"
               : "mr-auto bg-muted text-foreground rounded-bl-md"
           )}
         >
-          <div className="prose prose-sm max-w-none leading-relaxed prose-p:my-0 prose-li:my-0 prose-ul:pl-4 prose-ol:pl-4 text-sm">
+          <div className="prose prose-sm max-w-none leading-relaxed prose-p:my-0 prose-li:my-0 prose-ul:pl-4 prose-ol:pl-4 text-sm break-words [&>*]:break-words">
             <ReactMarkdown>{msg.content.replace(/\n/g, "  \n")}</ReactMarkdown>
           </div>
         </div>
