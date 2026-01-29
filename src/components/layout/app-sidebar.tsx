@@ -80,7 +80,7 @@ export function AppSidebar() {
                   key={option.label}
                   className={cn(
                     "flex items-center gap-2 p-2 rounded-md hover:bg-accent transition-colors cursor-pointer",
-                    isActive && "bg-accent text-accent-foreground",
+                    isActive && "bg-accent text-accent-foreground font-medium",
                   )}
                   onClick={option.onClick}
                 >

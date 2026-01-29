@@ -172,7 +172,7 @@ export function LibraryUploadDrawer({
                   >
                     <div className="flex items-start gap-3 p-2 w-full">
                       <FileUploadItemPreview className="size-20 shrink-0">
-                        <FileUploadItemProgress variant="circular" />
+                        <FileUploadItemProgress variant="fill" />
                       </FileUploadItemPreview>
                       <div className="flex-1 flex flex-col gap-2 min-w-0">
                         <Input
@@ -236,7 +236,7 @@ export function LibraryUploadDrawer({
               })
             }
           >
-            Upload
+            Save
           </Button>
         </DrawerFooter>
       </DrawerContent>

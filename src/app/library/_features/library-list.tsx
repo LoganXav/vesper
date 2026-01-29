@@ -72,7 +72,6 @@ export const LibraryList = () => {
             key={book.id}
             className="group overflow-hidden transition-all rounded-md shadow-none hover:bg-accent/50 pt-0 gap-2 cursor-pointer"
           >
-            {/* Book cover */}
             <CardContent className="p-0">
               <div className="relative h-40 w-full bg-muted">
                 <Image
@@ -84,19 +83,12 @@ export const LibraryList = () => {
               </div>
             </CardContent>
 
-            {/* Book info */}
             <CardHeader className="space-y-0 gap-0 px-4">
-              <CardTitle className="line-clamp-2 text-base">
+              <CardTitle className="line-clamp-2 text-sm">
                 {book.title}
               </CardTitle>
-              <p className="text-sm text-muted-foreground">{book.author}</p>
+              <p className="text-xs text-muted-foreground">{book.author}</p>
             </CardHeader>
-
-            <CardFooter className="px-4">
-              <p className="text-xs text-muted-foreground">
-                Published {book.year}
-              </p>
-            </CardFooter>
           </Card>
         ))}
       </div>
