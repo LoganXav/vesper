@@ -10,10 +10,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { UploadIcon } from "lucide-react";
-import { LibraryUploadDialog } from "./library-upload-dialog";
+import { LibraryUploadDrawer } from "./library-upload-drawer";
 
 export const LibraryList = () => {
-  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [isUploadDrawerOpen, setIsUploadDrawerOpen] = useState(false);
   const books = [
     {
       id: 1,
@@ -54,14 +54,14 @@ export const LibraryList = () => {
 
   return (
     <>
-      <LibraryUploadDialog
-        open={isUploadDialogOpen}
-        onOpenChange={setIsUploadDialogOpen}
+      <LibraryUploadDrawer
+        open={isUploadDrawerOpen}
+        onOpenChange={setIsUploadDrawerOpen}
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 2xl:grid-cols-4 gap-4">
         <div
-          onClick={() => setIsUploadDialogOpen(true)}
+          onClick={() => setIsUploadDrawerOpen(true)}
           className="border border-dashed rounded-md p-4 flex flex-col items-center justify-center gap-2 hover:bg-accent/50 transition-all cursor-pointer"
         >
           <UploadIcon size={16} className="text-muted-foreground" />
