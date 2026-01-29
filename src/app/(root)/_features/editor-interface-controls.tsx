@@ -16,6 +16,7 @@ import {
   Redo2Icon,
   Undo2Icon,
   FilePenLineIcon,
+  SigmaIcon,
 } from "lucide-react";
 
 interface Props {
@@ -104,9 +105,9 @@ export const EditorInterfaceControls = ({
         onClick={toggleEditable}
       >
         {!isEditable ? (
-          <FileLock2Icon size={16} strokeWidth={1} />
+          <FileLock2Icon size={16} />
         ) : (
-          <FilePenLineIcon size={16} strokeWidth={1} />
+          <FilePenLineIcon size={16} />
         )}
       </button>
 
@@ -116,12 +117,12 @@ export const EditorInterfaceControls = ({
         onMouseEnter={() => setMathOpen(true)}
         onMouseLeave={() => setMathOpen(false)}
       >
-        <button type="button" className={btnStyle}>
-          𝑓(x)
+        <button type="button" className={`${btnStyle}`}>
+          <SigmaIcon size={16} />
         </button>
 
         {mathOpen && (
-          <div className="min-w-max absolute top-7 -left-20 bg-popover border border-border rounded-lg p-2 grid grid-cols-3 gap-4 max-h-72 overflow-y-auto z-50 shadow-md scrollbar-none">
+          <div className="min-w-max absolute top-6 -left-20 bg-popover border border-border rounded-lg p-2 grid grid-cols-3 gap-4 max-h-72 overflow-y-auto z-50 scrollbar-none">
             {mathExpressions.map((expr) => (
               <div
                 key={expr.label}
@@ -152,7 +153,7 @@ export const EditorInterfaceControls = ({
         className={`${btnStyle} ${active(editor.isActive("bold"))}`}
         onClick={() => editor.chain().focus().toggleBold().run()}
       >
-        <BoldIcon size={16} strokeWidth={1} />
+        <BoldIcon size={16} />
       </button>
 
       <button
@@ -160,7 +161,7 @@ export const EditorInterfaceControls = ({
         className={`${btnStyle} ${active(editor.isActive("italic"))}`}
         onClick={() => editor.chain().focus().toggleItalic().run()}
       >
-        <ItalicIcon size={16} strokeWidth={1} />
+        <ItalicIcon size={16} />
       </button>
 
       <button
@@ -170,7 +171,7 @@ export const EditorInterfaceControls = ({
         )}`}
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
       >
-        <Heading1Icon size={16} strokeWidth={1} />
+        <Heading1Icon size={16} />
       </button>
 
       <button
@@ -180,7 +181,7 @@ export const EditorInterfaceControls = ({
         )}`}
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
       >
-        <Heading2Icon size={16} strokeWidth={1} />
+        <Heading2Icon size={16} />
       </button>
 
       <button
@@ -190,7 +191,7 @@ export const EditorInterfaceControls = ({
         )}`}
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
       >
-        <Heading3Icon size={16} strokeWidth={1} />
+        <Heading3Icon size={16} />
       </button>
 
       <button
@@ -198,7 +199,7 @@ export const EditorInterfaceControls = ({
         className={`${btnStyle} ${active(editor.isActive("bulletList"))}`}
         onClick={() => editor.chain().focus().toggleBulletList().run()}
       >
-        <ListIcon size={16} strokeWidth={1} />
+        <ListIcon size={16} />
       </button>
 
       <button
@@ -206,7 +207,7 @@ export const EditorInterfaceControls = ({
         className={`${btnStyle} ${active(editor.isActive("orderedList"))}`}
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
       >
-        <ListOrderedIcon size={16} strokeWidth={1} />
+        <ListOrderedIcon size={16} />
       </button>
 
       <hr className="border-border" />
@@ -217,14 +218,14 @@ export const EditorInterfaceControls = ({
         className={btnStyle}
         onClick={() => editor.chain().focus().undo().run()}
       >
-        <Undo2Icon size={16} strokeWidth={1} />
+        <Undo2Icon size={16} />
       </button>
       <button
         type="button"
         className={btnStyle}
         onClick={() => editor.chain().focus().redo().run()}
       >
-        <Redo2Icon size={16} strokeWidth={1} />
+        <Redo2Icon size={16} />
       </button>
     </div>
   );
