@@ -24,11 +24,13 @@ import { GoogleIcon, GitHubIcon } from "@/lib/icons";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DocumentHistory } from "@/app/(root)/_features/document/document-history";
 import { Routes } from "@/config/route-enums";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export function AppSidebar() {
   const { data: session } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
   const handleSignInWithGoogle = async () => {
     startTransition(() => {
@@ -71,16 +73,22 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent className="flex flex-col gap-1 mt-4">
-            {menuOptions.map((option) => (
-              <div
-                key={option.label}
-                className="flex items-center gap-2 p-2 rounded-md hover:bg-accent transition-colors cursor-pointer"
-                onClick={option.onClick}
-              >
-                {option.icon}
-                {option.label}
-              </div>
-            ))}
+            {menuOptions.map((option) => {
+              const isActive = option.href && pathname === option.href;
+              return (
+                <div
+                  key={option.label}
+                  className={cn(
+                    "flex items-center gap-2 p-2 rounded-md hover:bg-accent transition-colors cursor-pointer",
+                    isActive && "bg-accent text-accent-foreground",
+                  )}
+                  onClick={option.onClick}
+                >
+                  {option.icon}
+                  {option.label}
+                </div>
+              );
+            })}
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>

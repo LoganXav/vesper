@@ -5,6 +5,12 @@ import * as React from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   FileUpload,
   FileUploadDropzone,
   FileUploadItem,
@@ -16,7 +22,15 @@ import {
   FileUploadTrigger,
 } from "@/components/ui/file-upload";
 
-export function LibraryUploadDialog() {
+interface LibraryUploadDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function LibraryUploadDialog({
+  open,
+  onOpenChange,
+}: LibraryUploadDialogProps) {
   const [files, setFiles] = React.useState<File[]>([]);
 
   const onUpload = React.useCallback(
@@ -30,7 +44,7 @@ export function LibraryUploadDialog() {
         onProgress: (file: File, progress: number) => void;
         onSuccess: (file: File) => void;
         onError: (file: File, error: Error) => void;
-      }
+      },
     ) => {
       try {
         // Process each file individually
@@ -44,7 +58,7 @@ export function LibraryUploadDialog() {
             for (let i = 0; i < totalChunks; i++) {
               // Simulate network delay (100-300ms per chunk)
               await new Promise((resolve) =>
-                setTimeout(resolve, Math.random() * 200 + 100)
+                setTimeout(resolve, Math.random() * 200 + 100),
               );
 
               // Update progress for this specific file
@@ -59,7 +73,7 @@ export function LibraryUploadDialog() {
           } catch (error) {
             onError(
               file,
-              error instanceof Error ? error : new Error("Upload failed")
+              error instanceof Error ? error : new Error("Upload failed"),
             );
           }
         });
@@ -71,7 +85,7 @@ export function LibraryUploadDialog() {
         console.error("Unexpected error during upload:", error);
       }
     },
-    []
+    [],
   );
 
   const onFileReject = React.useCallback((file: File, message: string) => {
@@ -83,51 +97,87 @@ export function LibraryUploadDialog() {
   }, []);
 
   return (
-    <FileUpload
-      value={files}
-      onValueChange={setFiles}
-      maxFiles={10}
-      maxSize={5 * 1024 * 1024}
-      className="w-full max-w-md"
-      onUpload={onUpload}
-      onFileReject={onFileReject}
-      multiple
-    >
-      <FileUploadDropzone>
-        <div className="flex flex-col items-center gap-1 text-center">
-          <div className="flex items-center justify-center rounded-full border p-2.5">
-            <Upload className="size-6 text-muted-foreground" />
-          </div>
-          <p className="font-medium text-sm">Drag & drop files here</p>
-          <p className="text-muted-foreground text-xs">
-            Or click to browse (max 10 files, up to 5MB each)
-          </p>
-        </div>
-        <FileUploadTrigger asChild>
-          <Button variant="outline" size="sm" className="mt-2 w-fit">
-            Browse files
-          </Button>
-        </FileUploadTrigger>
-      </FileUploadDropzone>
-      <FileUploadList orientation="horizontal">
-        {files.map((file, index) => (
-          <FileUploadItem key={index} value={file} className="p-0">
-            <FileUploadItemPreview className="size-20">
-              <FileUploadItemProgress variant="circular" />
-            </FileUploadItemPreview>
-            <FileUploadItemMetadata className="sr-only" />
-            <FileUploadItemDelete asChild>
-              <Button
-                variant="secondary"
-                size="icon"
-                className="absolute -top-1 -right-1 size-5 rounded-full"
-              >
-                <X className="size-3" />
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogTitle>Upload Books</DialogTitle>
+        <FileUpload
+          value={files}
+          onValueChange={setFiles}
+          maxFiles={10}
+          maxSize={5 * 1024 * 1024}
+          className="w-full max-w-md"
+          onUpload={onUpload}
+          onFileReject={onFileReject}
+          multiple
+        >
+          <FileUploadDropzone>
+            <div className="flex flex-col items-center gap-1 text-center">
+              <div className="flex items-center justify-center rounded-full border p-2.5">
+                <Upload className="size-6 text-muted-foreground" />
+              </div>
+              <p className="font-medium text-sm">Drag & drop files here</p>
+              <p className="text-muted-foreground text-xs">
+                Or click to browse (max 10 files, up to 5MB each)
+              </p>
+            </div>
+            <FileUploadTrigger asChild>
+              <Button variant="outline" size="sm" className="mt-2 w-fit">
+                Browse files
               </Button>
-            </FileUploadItemDelete>
-          </FileUploadItem>
-        ))}
-      </FileUploadList>
-    </FileUpload>
+            </FileUploadTrigger>
+          </FileUploadDropzone>
+          <FileUploadList orientation="horizontal">
+            {files.map((file, index) => (
+              <FileUploadItem key={index} value={file} className="p-0">
+                <FileUploadItemPreview className="size-20">
+                  <FileUploadItemProgress variant="circular" />
+                </FileUploadItemPreview>
+                <FileUploadItemMetadata className="sr-only" />
+                <FileUploadItemDelete asChild>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="absolute -top-1 -right-1 size-5 rounded-full"
+                  >
+                    <X className="size-3" />
+                  </Button>
+                </FileUploadItemDelete>
+              </FileUploadItem>
+            ))}
+          </FileUploadList>
+        </FileUpload>
+
+        <DialogFooter className="grid lg:grid-cols-2 gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full"
+            onClick={() => onOpenChange(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="default"
+            size="sm"
+            className="w-full"
+            onClick={() =>
+              onUpload(files, {
+                onProgress: (file, progress) => {
+                  console.log(`${file.name} is ${progress}% uploaded`);
+                },
+                onSuccess: (file) => {
+                  console.log(`${file.name} uploaded successfully`);
+                },
+                onError: (file, error) => {
+                  console.error(`${file.name} upload failed:`, error);
+                },
+              })
+            }
+          >
+            Upload
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

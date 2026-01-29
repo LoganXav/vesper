@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import {
   Card,
@@ -6,8 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { UploadIcon } from "lucide-react";
+import { LibraryUploadDialog } from "./library-upload-dialog";
 
 export const LibraryList = () => {
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const books = [
     {
       id: 1,
@@ -47,39 +53,53 @@ export const LibraryList = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {books.map((book) => (
-        <Card
-          key={book.id}
-          className="group overflow-hidden transition-all rounded-md shadow-none hover:bg-accent hover:-translate-y-1 pt-0 gap-2 cursor-pointer"
+    <>
+      <LibraryUploadDialog
+        open={isUploadDialogOpen}
+        onOpenChange={setIsUploadDialogOpen}
+      />
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 2xl:grid-cols-4 gap-4">
+        <div
+          onClick={() => setIsUploadDialogOpen(true)}
+          className="border border-dashed rounded-md p-4 flex flex-col items-center justify-center gap-2 hover:bg-accent/50 transition-all cursor-pointer"
         >
-          {/* Book cover */}
-          <CardContent className="p-0">
-            <div className="relative h-40 w-full bg-muted">
-              <Image
-                src={book.cover}
-                alt={book.title}
-                fill
-                className="object-contain"
-              />
-            </div>
-          </CardContent>
+          <UploadIcon size={16} className="text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">Upload your books</p>
+        </div>
+        {books.map((book) => (
+          <Card
+            key={book.id}
+            className="group overflow-hidden transition-all rounded-md shadow-none hover:bg-accent/50 pt-0 gap-2 cursor-pointer"
+          >
+            {/* Book cover */}
+            <CardContent className="p-0">
+              <div className="relative h-40 w-full bg-muted">
+                <Image
+                  src={book.cover}
+                  alt={book.title}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </CardContent>
 
-          {/* Book info */}
-          <CardHeader className="space-y-0 gap-0 px-4">
-            <CardTitle className="line-clamp-2 text-base">
-              {book.title}
-            </CardTitle>
-            <p className="text-sm text-muted-foreground">{book.author}</p>
-          </CardHeader>
+            {/* Book info */}
+            <CardHeader className="space-y-0 gap-0 px-4">
+              <CardTitle className="line-clamp-2 text-base">
+                {book.title}
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">{book.author}</p>
+            </CardHeader>
 
-          <CardFooter className="px-4">
-            <p className="text-xs text-muted-foreground">
-              Published {book.year}
-            </p>
-          </CardFooter>
-        </Card>
-      ))}
-    </div>
+            <CardFooter className="px-4">
+              <p className="text-xs text-muted-foreground">
+                Published {book.year}
+              </p>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+    </>
   );
 };
