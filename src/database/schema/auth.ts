@@ -6,7 +6,6 @@ import {
   primaryKey,
   text,
   timestamp,
-  uuid,
 } from "drizzle-orm/pg-core";
 
 import type { AdapterAccountType } from "@auth/core/adapters";

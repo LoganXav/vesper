@@ -1,9 +1,9 @@
 "use client";
 
 import { useChat } from "@/hooks/use-chat";
-import { ChatInterfaceTextArea } from "@/app/(root)/_features/chat-interface-textarea";
-import ChatInterfaceConversation from "@/app/(root)/_features/chat-interface-conversation";
-import { ChatInterfaceEmptyConversation } from "@/app/(root)/_features/chat-interface-empty-conversation";
+import { ChatInterfaceTextArea } from "@/app/(root)/_features/chat/chat-interface-textarea";
+import ChatInterfaceConversation from "@/app/(root)/_features/chat/chat-interface-conversation";
+import { ChatInterfaceEmptyConversation } from "@/app/(root)/_features/chat/chat-interface-empty-conversation";
 
 export const ChatInterface = () => {
   const { messages, sendMessage, isSending, setMessages } = useChat();

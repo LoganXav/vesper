@@ -112,7 +112,7 @@ const EditorInterface = () => {
   if (!initialContent) return null;
 
   return (
-    <div className="group relative h-full xl:px-16">
+    <div className="group relative h-full xl:px-16 pt-8 w-full">
       <div className="sticky mr-2 sm:mr-4 top-[10px] right-5 z-10 mb-5 flex justify-end gap-2 2xl:opacity-0 2xl:-translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
         {charsCount !== undefined && charsCount !== null && charsCount > 0 && (
           <div className="h-6 rounded-xl bg-secondary border border-border  px-2 py-1 text-xs text-secondary-foreground">

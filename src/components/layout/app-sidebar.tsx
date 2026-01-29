@@ -22,11 +22,13 @@ import { signIn, signOut } from "next-auth/react";
 import { AvatarImage } from "@/components/ui/avatar";
 import { GoogleIcon, GitHubIcon } from "@/lib/icons";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { DocumentHistory } from "@/app/(root)/_features/document-history";
+import { DocumentHistory } from "@/app/(root)/_features/document/document-history";
+import { Routes } from "@/config/route-enums";
+import { useRouter } from "next/navigation";
 
 export function AppSidebar() {
   const { data: session } = useSession();
-
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const handleSignInWithGoogle = async () => {
     startTransition(() => {
@@ -52,6 +54,10 @@ export function AppSidebar() {
     {
       icon: <LibraryBigIcon className="size-4" />,
       label: "Library",
+      href: Routes.LIBRARY,
+      onClick: () => {
+        router.push(Routes.LIBRARY);
+      },
     },
   ];
 
@@ -69,6 +75,7 @@ export function AppSidebar() {
               <div
                 key={option.label}
                 className="flex items-center gap-2 p-2 rounded-md hover:bg-accent transition-colors cursor-pointer"
+                onClick={option.onClick}
               >
                 {option.icon}
                 {option.label}
