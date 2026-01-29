@@ -2,13 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UploadIcon } from "lucide-react";
 import { LibraryUploadDrawer } from "./library-upload-drawer";
 
@@ -59,7 +53,7 @@ export const LibraryList = () => {
         onOpenChange={setIsUploadDrawerOpen}
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 2xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 2xl:grid-cols-5 gap-4">
         <div
           onClick={() => setIsUploadDrawerOpen(true)}
           className="border border-dashed rounded-md p-4 flex flex-col items-center justify-center gap-2 hover:bg-accent/50 transition-all cursor-pointer"
