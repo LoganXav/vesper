@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ChatMessage } from "@/types";
+import { ChatMessage } from "@/types/index";
 import ReactMarkdown from "react-markdown";
 import { Dispatch, SetStateAction } from "react";
 
@@ -24,7 +24,7 @@ export default function ChatInterfaceConversation({
             "relative w-fit max-w-[85%] min-w-0 px-4 py-2 rounded-2xl transition-all duration-200 break-words",
             msg.role === "user"
               ? "ml-auto bg-secondary text-secondary-foreground rounded-br-md"
-              : "mr-auto bg-muted text-foreground rounded-bl-md"
+              : "mr-auto bg-muted text-foreground rounded-bl-md",
           )}
         >
           <div className="prose prose-sm max-w-none leading-relaxed prose-p:my-0 prose-li:my-0 prose-ul:pl-4 prose-ol:pl-4 text-sm break-words [&>*]:break-words">
