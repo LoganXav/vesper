@@ -101,8 +101,8 @@ export function AppSidebar() {
       <SidebarFooter className="mb-4">
         <SidebarGroup className="flex flex-col gap-2">
           {session?.user && (
-            <SidebarGroupContent className="flex items-center gap-2">
-              <Avatar>
+            <SidebarGroupContent className="flex items-center gap-2 ml-2">
+              <Avatar className="size-6">
                 <AvatarImage
                   src={session?.user?.image ?? ""}
                   alt={session?.user?.name ?? ""}
@@ -118,7 +118,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <Button
               variant="ghost"
-              className="bg-transparent shadow-none w-full items-center justify-start"
+              className="bg-transparent shadow-none w-full items-center justify-start hover:font-medium hover:text-foreground"
             >
               <GitHubIcon className="size-4" />
               Give a star on GitHub
@@ -130,7 +130,7 @@ export function AppSidebar() {
               <Button
                 variant="ghost"
                 onClick={handleSignOut}
-                className="w-full items-center justify-start"
+                className="w-full items-center justify-start hover:font-medium hover:text-foreground"
                 disabled={isPending}
               >
                 {isPending ? (
