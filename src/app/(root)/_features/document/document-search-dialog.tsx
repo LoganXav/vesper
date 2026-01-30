@@ -16,7 +16,7 @@ interface DocumentSearchDialogProps {
 }
 
 const documentItemClass =
-  "flex h-auto w-full justify-start gap-2 rounded-none px-3 py-2 hover:bg-accent/50 hover:text-foreground";
+  "flex h-auto w-full justify-start gap-2 rounded-md px-3 py-2 hover:bg-accent/50 hover:text-foreground";
 
 function DocumentSection({
   title,
@@ -41,7 +41,7 @@ function DocumentSection({
           onClick={() => onSelect(doc.id)}
           className={documentItemClass}
         >
-          <FileIcon className="size-4 shrink-0 text-muted-foreground" />
+          <FileIcon className="size-4 shrink-0" />
           <span className="truncate">{doc.title}</span>
         </Button>
       ))}
@@ -86,7 +86,7 @@ export const DocumentSearchDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="flex max-h-[85vh] flex-col gap-0 overflow-hidden p-0 sm:min-w-2xl">
+      <DialogContent className="flex max-h-[55vh] flex-col gap-0 overflow-hidden p-0 sm:min-w-2xl scrollbar-thin">
         <div className="flex items-center gap-2 border-b px-3 py-2">
           <SearchIcon className="size-4 shrink-0 text-muted-foreground" />
           <Input
@@ -96,29 +96,19 @@ export const DocumentSearchDialog = ({
             className="h-9 flex-1 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
             autoFocus
           />
-          {searchQuery && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setSearchQuery("")}
-              className="size-8 shrink-0 rounded-sm"
-              aria-label="Clear search"
-            >
-              <XIcon className="size-4" />
-            </Button>
-          )}
         </div>
 
-        <Button
-          variant="ghost"
-          onClick={createNewDocument}
-          className={documentItemClass}
-        >
-          <FilePlusCornerIcon className="size-4 shrink-0" />
-          <span>New Document</span>
-        </Button>
-
-        <div className="flex-1 overflow-y-auto overscroll-contain py-2">
+        <div className="p-2">
+          <Button
+            variant="ghost"
+            onClick={createNewDocument}
+            className={documentItemClass}
+          >
+            <FilePlusCornerIcon className="size-4 shrink-0" />
+            <span>New Document</span>
+          </Button>
+        </div>
+        <div className="flex-1 overflow-y-auto overscroll-contain p-2">
           {isLoading ? (
             <p className="px-3 py-6 text-center text-sm text-muted-foreground">
               Loading documents...
