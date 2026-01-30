@@ -5,17 +5,12 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 const BASE_URL = "documents";
 
-export const useGetDocumentsQuery = ({
-  params,
-}: {
-  params: { userId?: string };
-}) => {
+export const useGetDocumentsQuery = () => {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: [QueryTagEnums.DOCUMENT, params?.userId],
+    queryKey: [QueryTagEnums.DOCUMENTS],
     queryFn: async () => {
       return await getRequest<Document[]>({
         endpoint: `${BASE_URL}/`,
-        config: { params },
       });
     },
   });
@@ -34,7 +29,9 @@ export const useDeleteDocumentMutation = () => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryTagEnums.DOCUMENT] });
+      queryClient.invalidateQueries({
+        queryKey: [QueryTagEnums.DOCUMENTS],
+      });
     },
   });
 };

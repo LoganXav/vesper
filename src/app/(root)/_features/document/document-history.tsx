@@ -17,7 +17,7 @@ export const DocumentHistory = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const documentsQueryResult = useGetDocumentsQuery({ params: {} });
+  const documentsQueryResult = useGetDocumentsQuery();
   const documents = documentsQueryResult?.data?.data;
 
   const deleteDocumentMutation = useDeleteDocumentMutation();
@@ -54,14 +54,14 @@ export const DocumentHistory = () => {
                 "flex items-center h-9 gap-2 p-2 rounded-md hover:bg-accent transition-colors cursor-pointer relative",
                 isActive && "bg-accent text-accent-foreground font-medium",
               )}
-              onClick={() => {
-                router.push(Routes.HOME + document.id);
-              }}
             >
-              <FileIcon className="size-4" />
-              <h2 className="line-clamp-1 text-ellipsis overflow-hidden flex-1">
-                {document.title}
-              </h2>
+              <div
+                className="flex flex-1 items-center gap-2 cursor-pointer"
+                onClick={() => router.push(Routes.HOME + document.id)}
+              >
+                <FileIcon className="size-4" />
+                <h2 className="line-clamp-1 flex-1">{document.title}</h2>
+              </div>
               {!document.isDefault && (
                 <ConfirmationDialog
                   title="Delete Document?"
@@ -76,6 +76,7 @@ export const DocumentHistory = () => {
                     size="icon"
                     className="opacity-0 transition-opacity duration-200 p-1 h-6 w-6 shrink-0 rounded-full font-light hover:text-destructive"
                     aria-label="Delete document"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <Trash2Icon className="size-4" />
                   </Button>
