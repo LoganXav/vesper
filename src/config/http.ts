@@ -6,22 +6,6 @@ export const apiConfig = axios.create({
 });
 
 apiConfig.interceptors.request.use(async (config) => {
-  //   const authUser = await getAuthUserAction();
-
-  //   let data: Record<string, string | number | undefined> = {
-  //     userId: authUser?.data?.id,
-  //     tenantId: authUser?.data?.tenantId,
-  //     userRoleId: authUser?.data?.staff?.roleId,
-  //   };
-
-  //   if (authUser?.accessToken) {
-  //     data.authorization = `Bearer ${authUser?.accessToken}`;
-  //     Object.assign(data, config.data ?? {});
-  //     config.data = data;
-  //   } else {
-  //     data = config.data ?? data;
-  //   }
-
   if (!AppConfig.isProduction) {
     console.groupCollapsed(`@Request`, config.url);
     if (config.params) {
@@ -36,8 +20,6 @@ apiConfig.interceptors.request.use(async (config) => {
     }
     console.groupEnd();
   }
-
-  config.method = "POST";
 
   return config;
 });

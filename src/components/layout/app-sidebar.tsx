@@ -20,7 +20,7 @@ import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { signIn, signOut } from "next-auth/react";
 import { AvatarImage } from "@/components/ui/avatar";
-import { GoogleIcon, GitHubIcon } from "@/lib/icons";
+import { GoogleIcon, GitHubIcon } from "@/components/ui/icons";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DocumentHistory } from "@/app/(root)/_features/document/document-history";
 import { Routes } from "@/config/route-enums";

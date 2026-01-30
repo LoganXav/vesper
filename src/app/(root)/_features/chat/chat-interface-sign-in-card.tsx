@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { signIn } from "next-auth/react";
-import { GoogleIcon } from "@/lib/icons";
+import { GoogleIcon } from "@/components/ui/icons";
 import { useTransition } from "react";
 import { Loader2 } from "lucide-react";
 
