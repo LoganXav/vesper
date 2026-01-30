@@ -4,12 +4,16 @@ import { useState, useMemo, ReactElement } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useGetDocumentsQuery } from "@/queries/document";
+import {
+  useCreateDocumentMutation,
+  useGetDocumentsQuery,
+} from "@/queries/document";
 import { useRouter } from "next/navigation";
 import { Routes } from "@/config/route-enums";
 import { FileIcon, FilePlusCornerIcon, SearchIcon, XIcon } from "lucide-react";
 import type { Document } from "@/types";
 import { groupDocumentsByDate } from "@/utils/date-utils";
+import { toast } from "sonner";
 
 interface DocumentSearchDialogProps {
   children: ReactElement;
@@ -52,9 +56,28 @@ function DocumentSection({
 export const DocumentSearchDialog = ({
   children,
 }: DocumentSearchDialogProps) => {
+  const router = useRouter();
+
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const router = useRouter();
+
+  const { createDocumentMutate, createDocumentPending } =
+    useCreateDocumentMutation();
+
+  const handleCreateDocument = () => {
+    createDocumentMutate(
+      { title: "Untitled Document" },
+      {
+        onSuccess: () => {
+          setOpen(false);
+          router.push(Routes.HOME);
+        },
+        onError: (error) => {
+          toast.error(error.message);
+        },
+      },
+    );
+  };
 
   const { data, isLoading } = useGetDocumentsQuery();
   const documents = data?.data ?? [];
@@ -70,11 +93,6 @@ export const DocumentSearchDialog = ({
 
   const selectDocument = (documentId: string) => {
     router.push(Routes.HOME + documentId);
-    setOpen(false);
-  };
-
-  const createNewDocument = () => {
-    router.push(Routes.HOME);
     setOpen(false);
   };
 
@@ -101,8 +119,9 @@ export const DocumentSearchDialog = ({
         <div className="p-2">
           <Button
             variant="ghost"
-            onClick={createNewDocument}
+            onClick={handleCreateDocument}
             className={documentItemClass}
+            disabled={createDocumentPending}
           >
             <FilePlusCornerIcon className="size-4 shrink-0" />
             <span>New Document</span>

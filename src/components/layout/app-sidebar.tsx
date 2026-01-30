@@ -69,7 +69,7 @@ export function AppSidebar() {
   };
 
   const menuItemClass = cn(
-    "flex items-center justify-start gap-2 p-2 rounded-md hover:bg-accent hover:text-foreground font-medium transition-colors cursor-pointer",
+    "flex items-center justify-start gap-2 p-2 rounded-md hover:bg-accent hover:text-foreground transition-colors cursor-pointer",
   );
 
   return (
