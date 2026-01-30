@@ -51,7 +51,7 @@ export const DocumentHistory = () => {
             <div
               key={document.id}
               className={cn(
-                "flex items-center h-9 gap-2 p-2 rounded-md hover:bg-accent transition-colors cursor-pointer relative",
+                "flex items-center h-9 gap-0 p-2 rounded-md hover:bg-accent transition-colors cursor-pointer relative",
                 isActive && "bg-accent text-accent-foreground font-medium",
               )}
             >

@@ -16,16 +16,17 @@ import {
   LogOutIcon,
   FileSearchCorner,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
+import { Routes } from "@/config/route-enums";
 import { Button } from "@/components/ui/button";
 import { signIn, signOut } from "next-auth/react";
 import { AvatarImage } from "@/components/ui/avatar";
+import { useRouter, usePathname } from "next/navigation";
 import { GoogleIcon, GitHubIcon } from "@/components/ui/icons";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DocumentHistory } from "@/app/(root)/_features/document/document-history";
-import { Routes } from "@/config/route-enums";
-import { useRouter, usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { DocumentSearchDialog } from "@/app/(root)/_features/document/document-search-dialog";
 
 export function AppSidebar() {
   const { data: session } = useSession();
@@ -44,24 +45,9 @@ export function AppSidebar() {
     });
   };
 
-  const menuOptions = [
-    {
-      icon: <FilePlusCornerIcon className="size-4" />,
-      label: "New Document",
-    },
-    {
-      icon: <FileSearchCorner className="size-4" />,
-      label: "Search",
-    },
-    {
-      icon: <LibraryBigIcon className="size-4" />,
-      label: "Library",
-      href: Routes.LIBRARY,
-      onClick: () => {
-        router.push(Routes.LIBRARY);
-      },
-    },
-  ];
+  const menuItemClass = cn(
+    "flex items-center gap-2 p-2 rounded-md hover:bg-accent transition-colors cursor-pointer",
+  );
 
   return (
     <Sidebar>
@@ -73,22 +59,27 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent className="flex flex-col gap-1 mt-4">
-            {menuOptions.map((option) => {
-              const isActive = option.href && pathname === option.href;
-              return (
-                <div
-                  key={option.label}
-                  className={cn(
-                    "flex items-center gap-2 p-2 rounded-md hover:bg-accent transition-colors cursor-pointer",
-                    isActive && "bg-accent text-accent-foreground font-medium",
-                  )}
-                  onClick={option.onClick}
-                >
-                  {option.icon}
-                  {option.label}
-                </div>
-              );
-            })}
+            <div className={menuItemClass}>
+              <FilePlusCornerIcon className="size-4" />
+              New Document
+            </div>
+            <DocumentSearchDialog>
+              <div className={menuItemClass}>
+                <FileSearchCorner className="size-4" />
+                Search Documents
+              </div>
+            </DocumentSearchDialog>
+            <div
+              className={cn(
+                menuItemClass,
+                pathname === Routes.LIBRARY &&
+                  "bg-accent text-accent-foreground font-medium",
+              )}
+              onClick={() => router.push(Routes.LIBRARY)}
+            >
+              <LibraryBigIcon className="size-4" />
+              Library
+            </div>
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
@@ -101,7 +92,7 @@ export function AppSidebar() {
       <SidebarFooter className="mb-4">
         <SidebarGroup className="flex flex-col gap-2">
           {session?.user && (
-            <SidebarGroupContent className="flex items-center gap-2 ml-2">
+            <div className="flex items-center gap-2 ml-2">
               <Avatar className="size-6">
                 <AvatarImage
                   src={session?.user?.image ?? ""}
@@ -112,10 +103,10 @@ export function AppSidebar() {
                 </AvatarFallback>
               </Avatar>
               <p className="text-sm font-medium">{session?.user?.name}</p>
-            </SidebarGroupContent>
+            </div>
           )}
 
-          <SidebarGroupContent>
+          <SidebarGroupContent className="space-y-1">
             <Button
               variant="ghost"
               className="bg-transparent shadow-none w-full items-center justify-start hover:font-medium hover:text-foreground"
@@ -123,9 +114,7 @@ export function AppSidebar() {
               <GitHubIcon className="size-4" />
               Give a star on GitHub
             </Button>
-          </SidebarGroupContent>
 
-          <SidebarGroupContent>
             {session?.user ? (
               <Button
                 variant="ghost"
