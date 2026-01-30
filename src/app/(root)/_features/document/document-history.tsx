@@ -54,11 +54,9 @@ export const DocumentHistory = () => {
                 "flex items-center h-9 gap-0 p-2 rounded-md hover:bg-accent transition-colors cursor-pointer relative",
                 isActive && "bg-accent text-accent-foreground font-medium",
               )}
+              onClick={() => router.push(Routes.HOME + document.id)}
             >
-              <div
-                className="flex flex-1 items-center gap-2 cursor-pointer"
-                onClick={() => router.push(Routes.HOME + document.id)}
-              >
+              <div className="flex flex-1 items-center gap-2 cursor-pointer">
                 <FileIcon className="size-4" />
                 <h2 className="line-clamp-1 flex-1">{document.title}</h2>
               </div>

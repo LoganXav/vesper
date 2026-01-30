@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Sidebar,
   SidebarContent,
@@ -16,6 +18,7 @@ import {
   LogOutIcon,
   FileSearchCorner,
 } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import { Routes } from "@/config/route-enums";
@@ -24,15 +27,35 @@ import { signIn, signOut } from "next-auth/react";
 import { AvatarImage } from "@/components/ui/avatar";
 import { useRouter, usePathname } from "next/navigation";
 import { GoogleIcon, GitHubIcon } from "@/components/ui/icons";
+import { useCreateDocumentMutation } from "@/queries/document";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DocumentHistory } from "@/app/(root)/_features/document/document-history";
 import { DocumentSearchDialog } from "@/app/(root)/_features/document/document-search-dialog";
 
 export function AppSidebar() {
-  const { data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+  const { data: session } = useSession();
+
   const [isPending, startTransition] = useTransition();
+
+  const { createDocumentMutate, createDocumentPending } =
+    useCreateDocumentMutation();
+
+  const handleCreateDocument = () => {
+    createDocumentMutate(
+      { title: "Untitled Document" },
+      {
+        onSuccess: () => {
+          router.push(Routes.HOME);
+        },
+        onError: (error) => {
+          toast.error(error.message);
+        },
+      },
+    );
+  };
+
   const handleSignInWithGoogle = async () => {
     startTransition(() => {
       signIn("google");
@@ -46,7 +69,7 @@ export function AppSidebar() {
   };
 
   const menuItemClass = cn(
-    "flex items-center gap-2 p-2 rounded-md hover:bg-accent transition-colors cursor-pointer",
+    "flex items-center justify-start gap-2 p-2 rounded-md hover:bg-accent hover:text-foreground font-medium transition-colors cursor-pointer",
   );
 
   return (
@@ -59,10 +82,15 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent className="flex flex-col gap-1 mt-4">
-            <div className={menuItemClass}>
+            <Button
+              variant="ghost"
+              className={cn(menuItemClass)}
+              onClick={handleCreateDocument}
+              disabled={createDocumentPending}
+            >
               <FilePlusCornerIcon className="size-4" />
               New Document
-            </div>
+            </Button>
             <DocumentSearchDialog>
               <div className={menuItemClass}>
                 <FileSearchCorner className="size-4" />

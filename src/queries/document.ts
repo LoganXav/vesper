@@ -1,4 +1,4 @@
-import { getRequest, deleteRequest } from "@/config/base-query";
+import { getRequest, deleteRequest, postRequest } from "@/config/base-query";
 import { QueryTagEnums } from "@/config/query-enums";
 import { Document } from "@/types";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -34,4 +34,32 @@ export const useDeleteDocumentMutation = () => {
       });
     },
   });
+};
+
+export const useCreateDocumentMutation = () => {
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: createDocumentMutate,
+    isPending: createDocumentPending,
+    error: createDocumentError,
+  } = useMutation({
+    mutationFn: async ({ title }: { title: string }) => {
+      return await postRequest<Document>({
+        endpoint: `${BASE_URL}/`,
+        payload: { title },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QueryTagEnums.DOCUMENTS],
+      });
+    },
+  });
+
+  return {
+    createDocumentMutate,
+    createDocumentPending,
+    createDocumentError,
+  };
 };

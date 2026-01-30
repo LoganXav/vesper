@@ -1,8 +1,9 @@
 import { auth } from "@/lib/auth";
 import { HttpError } from "@/lib/error";
 import { NextRequest, NextResponse } from "next/server";
-import { getDocumentsHandler } from "./handlers/get-documents";
-import { deleteDocumentHandler } from "./handlers/delete-documents";
+import { getDocumentsHandler } from "./handlers/get-document";
+import { deleteDocumentHandler } from "./handlers/delete-document";
+import { createDocumentHandler } from "./handlers/create-document";
 
 export async function GET() {
   try {
@@ -23,16 +24,18 @@ export async function GET() {
     if (error instanceof HttpError) {
       return NextResponse.json(
         {
-          ok: false,
-          error: error.message,
+          data: { success: false },
+          message: error.message,
         },
         { status: error.status },
       );
     }
     return NextResponse.json(
       {
-        ok: false,
-        error: error.message || "Something went wrong",
+        result: {
+          data: { success: false },
+          message: error.message || "Something went wrong",
+        },
       },
       { status: error.status || 500 },
     );
@@ -67,18 +70,63 @@ export async function DELETE(request: NextRequest) {
     if (error instanceof HttpError) {
       return NextResponse.json(
         {
-          ok: false,
-          error: error.message,
+          data: { success: false },
+          message: error.message,
         },
         { status: error.status },
       );
     }
     return NextResponse.json(
       {
-        ok: false,
-        error: error.message || "Something went wrong",
+        result: {
+          data: { success: false },
+          message: error.message || "Something went wrong",
+        },
       },
       { status: error.status || 500 },
     );
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const session = await auth();
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      throw new HttpError("Unauthorized", 401);
+    }
+
+    const body = await request.json().catch(() => ({}));
+    const title = body.title;
+
+    if (!title) {
+      throw new HttpError("Title is required", 400);
+    }
+
+    await createDocumentHandler({ title, userId });
+
+    return NextResponse.json({
+      result: {
+        data: { success: true },
+        message: "Document created successfully",
+      },
+    });
+  } catch (error: any) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        {
+          data: { success: false },
+          message: error.message,
+        },
+        { status: error.status },
+      );
+    }
+    return NextResponse.json({
+      result: {
+        data: { success: false },
+        message: error.message || "Something went wrong",
+      },
+    });
   }
 }
