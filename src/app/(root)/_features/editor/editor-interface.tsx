@@ -16,13 +16,13 @@ import { EditorContent } from "@/components/ui/editor";
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
 
-const EditorInterface = () => {
+const EditorInterface = ({ documentId }: { documentId: string }) => {
   const [editor, setEditor] = useState<Editor | null>(null);
   const editorRef = useRef<Editor | null>(null);
   const [isEditable, setIsEditable] = useState(true);
 
   const [initialContent, setInitialContent] = useState<null | JSONContent>(
-    null
+    null,
   );
   const [isSaved, setIsSaved] = useState(false);
   const [charsCount, setCharsCount] = useState<number | undefined>(undefined);
@@ -34,7 +34,7 @@ const EditorInterface = () => {
     window.localStorage.setItem("vesper-html-content", editor.getHTML());
     window.localStorage.setItem(
       "vesper-structured-content",
-      JSON.stringify(json)
+      JSON.stringify(json),
     );
     const markdownStorage = (editor.storage as any).markdown as
       | { getMarkdown: () => string }
@@ -42,7 +42,7 @@ const EditorInterface = () => {
     if (markdownStorage) {
       window.localStorage.setItem(
         "vesper-markdown",
-        markdownStorage.getMarkdown()
+        markdownStorage.getMarkdown(),
       );
     }
 
@@ -63,7 +63,7 @@ const EditorInterface = () => {
         onClick: (node, pos) => {
           const newCalc = prompt(
             "Enter new block math expression:",
-            node.attrs.latex
+            node.attrs.latex,
           );
           if (newCalc && editorRef.current) {
             editorRef.current
@@ -79,7 +79,7 @@ const EditorInterface = () => {
         onClick: (node, pos) => {
           const newCalc = prompt(
             "Enter new inline math expression:",
-            node.attrs.latex
+            node.attrs.latex,
           );
           if (newCalc && editorRef.current) {
             editorRef.current
@@ -112,7 +112,7 @@ const EditorInterface = () => {
   if (!initialContent) return null;
 
   return (
-    <div className="group relative h-full xl:px-16 pt-8 w-full">
+    <div className="group relative min-h-full xl:px-16 pt-8 w-full">
       <div className="sticky mr-2 sm:mr-4 top-[10px] right-5 z-10 mb-5 flex justify-end gap-2 2xl:opacity-0 2xl:-translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
         {charsCount !== undefined && charsCount !== null && charsCount > 0 && (
           <div className="h-6 rounded-xl bg-secondary border border-border  px-2 py-1 text-xs text-secondary-foreground">
@@ -138,7 +138,7 @@ const EditorInterface = () => {
       )}
 
       <EditorContent
-        className="tiptap text-foreground"
+        className="tiptap text-foreground pt-8"
         immediatelyRender={false}
         editable={true}
         onCreate={({ editor }) => {
