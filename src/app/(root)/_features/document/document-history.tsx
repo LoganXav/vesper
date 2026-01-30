@@ -11,6 +11,7 @@ import { Routes } from "@/config/route-enums";
 import { cn } from "@/lib/utils";
 import { getActiveDocumentPathId } from "@/utils/route-utils";
 import { Button } from "@/components/ui/button";
+import { ConfirmationDialog } from "@/components/wrappers/confirmation-dialog";
 
 export const DocumentHistory = () => {
   const router = useRouter();
@@ -23,20 +24,15 @@ export const DocumentHistory = () => {
 
   const activeDocumentId = getActiveDocumentPathId(pathname);
 
-  const handleDelete = async (e: React.MouseEvent, documentId: string) => {
-    e.stopPropagation(); // Prevent navigation when clicking delete
-
-    if (confirm("Are you sure you want to delete this document?")) {
-      try {
-        await deleteDocumentMutation.mutateAsync({ documentId });
-        // If we're currently viewing the deleted document, redirect to home
-        if (activeDocumentId === documentId) {
-          router.push(Routes.HOME);
-        }
-      } catch (error) {
-        console.error("Failed to delete document:", error);
-        alert("Failed to delete document. Please try again.");
+  const handleDelete = async (documentId: string) => {
+    try {
+      await deleteDocumentMutation.mutateAsync({ documentId });
+      if (activeDocumentId === documentId) {
+        router.push(Routes.HOME);
       }
+    } catch (error) {
+      console.error("Failed to delete document:", error);
+      throw error;
     }
   };
 
@@ -67,15 +63,23 @@ export const DocumentHistory = () => {
                 {document.title}
               </h2>
               {!document.isDefault && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={(e) => handleDelete(e, document.id)}
-                  className="opacity-0 transition-opacity duration-200 p-1 h-6 w-6 shrink-0 rounded-full font-light hover:text-destructive"
-                  aria-label="Delete document"
+                <ConfirmationDialog
+                  title="Delete Document?"
+                  description={`Are you sure you want to delete "${document.title}"? This action cannot be undone.`}
+                  confirmText="Delete"
+                  cancelText="Cancel"
+                  variant="destructive"
+                  onConfirm={() => handleDelete(document.id)}
                 >
-                  <Trash2Icon className="size-4" />
-                </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="opacity-0 transition-opacity duration-200 p-1 h-6 w-6 shrink-0 rounded-full font-light hover:text-destructive"
+                    aria-label="Delete document"
+                  >
+                    <Trash2Icon className="size-4" />
+                  </Button>
+                </ConfirmationDialog>
               )}
             </div>
           );

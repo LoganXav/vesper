@@ -62,12 +62,8 @@ export const deleteRequest = async <T>({
   payload,
   config = {},
 }: DeleteRequestPropsType): Promise<DeleteRequestReturnType<T>> => {
-  return await apiConfig.post(
-    endpoint,
-    { action: "delete", ...payload },
-    {
-      ...config,
-      params: config.params,
-    },
-  );
+  return await apiConfig.delete(endpoint, {
+    ...config,
+    data: payload,
+  });
 };

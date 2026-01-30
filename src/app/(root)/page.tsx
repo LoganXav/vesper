@@ -1,8 +1,8 @@
 import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { getMostRecentDocumentHandler } from "@/app/api/documents/handlers/get-documents";
-import { Routes } from "@/config/route-enums";
 import { config } from "@/config";
+import { redirect } from "next/navigation";
+import { Routes } from "@/config/route-enums";
+import { getMostRecentDocumentHandler } from "@/app/api/documents/handlers/get-documents";
 
 export default async function RedirectToEditor() {
   const session = await auth();

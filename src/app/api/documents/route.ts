@@ -49,7 +49,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     const body = await request.json().catch(() => ({}));
-    const documentId = body.documentId || body.id;
+    const documentId = body.documentId;
 
     if (!documentId) {
       throw new HttpError("Document ID is required", 400);
