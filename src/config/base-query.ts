@@ -25,6 +25,32 @@ export interface GetRequestReturnType<T> {
   statusCode?: number;
 }
 
+export interface DeleteRequestPropsType {
+  endpoint: string;
+  payload?: Record<string, any>;
+  config?: any;
+}
+
+export interface DeleteRequestReturnType<T> {
+  data: T;
+  message: string;
+  status?: string;
+  statusCode?: number;
+}
+
+export interface PutRequestPropsType {
+  endpoint: string;
+  payload?: Record<string, any>;
+  config?: any;
+}
+
+export interface PutRequestReturnType<T> {
+  data: T;
+  message: string;
+  status?: string;
+  statusCode?: number;
+}
+
 export const postRequest = async <T>({
   endpoint,
   payload,
@@ -44,25 +70,23 @@ export const getRequest = async <T>({
   return await apiConfig.get(endpoint, { params: payload, ...config });
 };
 
-export interface DeleteRequestPropsType {
-  endpoint: string;
-  payload?: Record<string, any>;
-  config?: any;
-}
-
-export interface DeleteRequestReturnType<T> {
-  data: T;
-  message: string;
-  status?: string;
-  statusCode?: number;
-}
-
 export const deleteRequest = async <T>({
   endpoint,
   payload,
   config = {},
 }: DeleteRequestPropsType): Promise<DeleteRequestReturnType<T>> => {
   return await apiConfig.delete(endpoint, {
+    ...config,
+    data: payload,
+  });
+};
+
+export const putRequest = async <T>({
+  endpoint,
+  payload,
+  config = {},
+}: PutRequestPropsType): Promise<PutRequestReturnType<T>> => {
+  return await apiConfig.put(endpoint, payload, {
     ...config,
     data: payload,
   });

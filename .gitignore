@@ -44,5 +44,4 @@ migrations
 
 # vscode
 /.vscode/
-/.vscode/launch.json
 .vscode/
