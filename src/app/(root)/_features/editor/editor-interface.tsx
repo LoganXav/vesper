@@ -16,11 +16,17 @@ import { EditorContent } from "@/components/ui/editor";
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
 import { Input } from "@/components/ui/input";
+import { useGetDocumentQuery } from "@/queries/document";
 
 const EditorInterface = ({ documentId }: { documentId: string }) => {
   const [editor, setEditor] = useState<Editor | null>(null);
   const editorRef = useRef<Editor | null>(null);
   const [isEditable, setIsEditable] = useState(true);
+
+  const { data: documentData, isLoading: isDocumentLoading } =
+    useGetDocumentQuery({
+      documentId,
+    });
 
   const [initialContent, setInitialContent] = useState<null | JSONContent>(
     null,
@@ -110,12 +116,15 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
     }
   }, []);
 
-  if (!initialContent) return null;
+  if (!initialContent || isDocumentLoading) return null;
 
   return (
     <div className="group relative min-h-full xl:px-6 pt-0 w-full">
       <div className="sticky top-3 flex items-center  max-w-max gap-3 left-10 border-l pl-3 z-50 2xl:opacity-0 2xl:-translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
-        <Input className="p-0 border-none h-auto outline-none focus-visible:border-none focus-visible:ring-0 rounded-none max-w-max backdrop-blur-lg rounded-r-full" />
+        <Input
+          value={documentData?.data?.title}
+          className="p-0 border-none h-auto outline-none overflow-hidden text-ellipsis focus-visible:border-none focus-visible:ring-0 rounded-none max-w-max backdrop-blur-lg rounded-r-full"
+        />
       </div>
       <div className="sticky mr-2 sm:mr-4 top-[10px] right-5 z-10 mb-5 flex justify-end gap-2 2xl:opacity-0 2xl:-translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
         {charsCount !== undefined && charsCount !== null && charsCount > 0 && (

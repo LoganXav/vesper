@@ -19,6 +19,7 @@ interface ConfirmationDialogProps {
   title?: string;
   description?: string;
   confirmText?: string;
+  isPending?: boolean;
   cancelText?: string;
   onConfirm: () => void | Promise<void>;
   onCancel?: () => void;
@@ -30,23 +31,20 @@ export const ConfirmationDialog = ({
   title = "Are you sure?",
   description,
   confirmText = "Confirm",
+  isPending = false,
   cancelText = "Cancel",
   onConfirm,
   onCancel,
   variant = "default",
 }: ConfirmationDialogProps) => {
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleConfirm = async () => {
-    setIsLoading(true);
     try {
       await onConfirm();
       setOpen(false);
     } catch (error) {
       toast.error("Failed to confirm action");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -87,7 +85,7 @@ export const ConfirmationDialog = ({
           <Button
             variant="outline"
             onClick={handleCancel}
-            disabled={isLoading}
+            disabled={isPending}
             size="sm"
           >
             {cancelText}
@@ -95,11 +93,11 @@ export const ConfirmationDialog = ({
           <Button
             variant={variant === "destructive" ? "destructive" : "default"}
             onClick={handleConfirm}
-            disabled={isLoading}
+            disabled={isPending}
             size="sm"
           >
             {confirmText}
-            {isLoading && <Loader className="size-3 text-background" />}
+            {isPending && <Loader className="size-3 text-background" />}
           </Button>
         </DialogFooter>
       </DialogContent>

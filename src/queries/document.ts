@@ -18,14 +18,30 @@ export const useGetDocumentsQuery = () => {
   return { data, isLoading, error, refetch };
 };
 
+export const useGetDocumentQuery = ({ documentId }: { documentId: string }) => {
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: [QueryTagEnums.DOCUMENTS, documentId],
+    queryFn: async () => {
+      return await getRequest<Document>({
+        endpoint: `${BASE_URL}/${documentId}`,
+      });
+    },
+  });
+
+  return { data, isLoading, error, refetch };
+};
+
 export const useDeleteDocumentMutation = () => {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  const {
+    mutate: deleteDocumentMutate,
+    isPending: deleteDocumentPending,
+    error: deleteDocumentError,
+  } = useMutation({
     mutationFn: async ({ documentId }: { documentId: string }) => {
-      return await deleteRequest<{ success: boolean }>({
-        endpoint: `${BASE_URL}/`,
-        payload: { documentId },
+      return await deleteRequest({
+        endpoint: `${BASE_URL}/${documentId}`,
       });
     },
     onSuccess: () => {
@@ -34,6 +50,12 @@ export const useDeleteDocumentMutation = () => {
       });
     },
   });
+
+  return {
+    deleteDocumentMutate,
+    deleteDocumentPending,
+    deleteDocumentError,
+  };
 };
 
 export const useCreateDocumentMutation = () => {

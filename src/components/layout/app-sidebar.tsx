@@ -79,7 +79,7 @@ export function AppSidebar() {
           VesperAI <AudioWaveformIcon className="size-4" />
         </div>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="scrollbar-thin">
         <SidebarGroup>
           <SidebarGroupContent className="flex flex-col gap-1 mt-4">
             <Button

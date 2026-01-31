@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { getActiveDocumentPathId } from "@/utils/route-utils";
 import { Button } from "@/components/ui/button";
 import { ConfirmationDialog } from "@/components/wrappers/confirmation-dialog";
+import { toast } from "sonner";
 
 export const DocumentHistory = () => {
   const router = useRouter();
@@ -20,20 +21,26 @@ export const DocumentHistory = () => {
   const documentsQueryResult = useGetDocumentsQuery();
   const documents = documentsQueryResult?.data?.data;
 
-  const deleteDocumentMutation = useDeleteDocumentMutation();
+  const { deleteDocumentMutate, deleteDocumentPending } =
+    useDeleteDocumentMutation();
 
   const activeDocumentId = getActiveDocumentPathId(pathname);
 
-  const handleDelete = async (documentId: string) => {
-    try {
-      await deleteDocumentMutation.mutateAsync({ documentId });
-      if (activeDocumentId === documentId) {
-        router.push(Routes.HOME);
-      }
-    } catch (error) {
-      console.error("Failed to delete document:", error);
-      throw error;
-    }
+  const handleDelete = (documentId: string) => {
+    deleteDocumentMutate(
+      { documentId },
+      {
+        onSuccess: () => {
+          // toast.success("Document deleted");
+          if (activeDocumentId === documentId) {
+            router.push(Routes.HOME);
+          }
+        },
+        onError: (error) => {
+          toast.error(error.message);
+        },
+      },
+    );
   };
 
   return (
@@ -68,6 +75,7 @@ export const DocumentHistory = () => {
                   cancelText="Cancel"
                   variant="destructive"
                   onConfirm={() => handleDelete(document.id)}
+                  isPending={deleteDocumentPending}
                 >
                   <Button
                     variant="ghost"
