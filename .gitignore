@@ -41,3 +41,8 @@ yarn-error.log*
 next-env.d.ts
 
 migrations
+
+# vscode
+/.vscode/
+/.vscode/launch.json
+.vscode/
