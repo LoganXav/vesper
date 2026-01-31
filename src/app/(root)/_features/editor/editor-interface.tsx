@@ -15,6 +15,7 @@ import { FileCheckIcon, GripVerticalIcon, FileClockIcon } from "lucide-react";
 import { EditorContent } from "@/components/ui/editor";
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
+import { Input } from "@/components/ui/input";
 
 const EditorInterface = ({ documentId }: { documentId: string }) => {
   const [editor, setEditor] = useState<Editor | null>(null);
@@ -112,7 +113,10 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
   if (!initialContent) return null;
 
   return (
-    <div className="group relative min-h-full xl:px-16 pt-8 w-full">
+    <div className="group relative min-h-full xl:px-6 pt-0 w-full">
+      <div className="sticky top-3 flex items-center  max-w-max gap-3 left-10 border-l pl-3 z-50 2xl:opacity-0 2xl:-translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
+        <Input className="p-0 border-none h-auto outline-none focus-visible:border-none focus-visible:ring-0 rounded-none max-w-max backdrop-blur-lg rounded-r-full" />
+      </div>
       <div className="sticky mr-2 sm:mr-4 top-[10px] right-5 z-10 mb-5 flex justify-end gap-2 2xl:opacity-0 2xl:-translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
         {charsCount !== undefined && charsCount !== null && charsCount > 0 && (
           <div className="h-6 rounded-xl bg-secondary border border-border  px-2 py-1 text-xs text-secondary-foreground">
@@ -138,7 +142,7 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
       )}
 
       <EditorContent
-        className="tiptap text-foreground pt-8"
+        className="tiptap text-foreground pt-8 xl:px-12"
         immediatelyRender={false}
         editable={true}
         onCreate={({ editor }) => {
