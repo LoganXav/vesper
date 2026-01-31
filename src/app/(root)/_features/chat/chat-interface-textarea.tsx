@@ -10,7 +10,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-  PlusIcon,
+  SettingsIcon,
   Link2Icon,
   SparklesIcon,
   SendHorizontalIcon,
@@ -23,10 +23,10 @@ import {
 interface Props {
   onSend: ({
     message,
-    context,
+    documentId,
   }: {
     message: string;
-    context: string;
+    documentId?: string;
   }) => Promise<void>;
   isSending?: boolean;
 }
@@ -78,7 +78,6 @@ export const ChatInterfaceTextArea = ({ onSend, isSending }: Props) => {
 
     await onSend({
       message: message.trim(),
-      context: "",
     });
     setMessage("");
   };
@@ -212,7 +211,7 @@ export const ChatInterfaceTextArea = ({ onSend, isSending }: Props) => {
                 isActionsOpen && "rotate-[135deg]",
               )}
             >
-              <PlusIcon size={16} />
+              <SettingsIcon size={16} />
             </div>
           </Button>
         </div>

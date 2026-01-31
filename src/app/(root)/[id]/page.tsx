@@ -1,7 +1,6 @@
 import EditorInterface from "../_features/editor/editor-interface";
 import { ChatInterface } from "../_features/chat/chat-interface";
 import { ChatInterfaceMobile } from "../_features/chat/chat-interface-mobile";
-import { use } from "react";
 
 export default async function DocumentPage({
   params,
@@ -15,7 +14,7 @@ export default async function DocumentPage({
       <div className="lg:col-span-2 h-full overflow-y-auto bg-background p-0 scrollbar-none">
         <EditorInterface documentId={id} />
       </div>
-      <div className="lg:col-span-1 hidden lg:flex h-full bg-sidebar border-l border-border">
+      <div className="lg:col-span-1 hidden lg:flex h-full bg-sidebar border-l border-border overflow-y-auto">
         <ChatInterface />
       </div>
       <ChatInterfaceMobile />
