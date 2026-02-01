@@ -10,6 +10,14 @@ export type ChatMessage = {
   role: "user" | "model";
   content: string;
   preview?: { data: string } | null;
+  edits?: ChatMessageEdit[];
+  isStreaming?: boolean;
+};
+
+export type ChatMessageEdit = {
+  id: string;
+  content: string;
+  action: "insert" | "delete" | "insert_after" | "update" | "insert_before";
 };
 
 export type Chunk = {

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useChat } from "@/hooks/use-chat";
+import { useChatAutoScroll } from "@/hooks/use-auto-scroll";
 import { ChatInterfaceTextArea } from "@/app/(root)/_features/chat/chat-interface-textarea";
 import ChatInterfaceConversation from "@/app/(root)/_features/chat/chat-interface-conversation";
 import { ChatInterfaceEmptyConversation } from "@/app/(root)/_features/chat/chat-interface-empty-conversation";
@@ -33,11 +34,14 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
   });
 
   const { messages, sendMessage, isSending, setMessages } = useChat({
-    chatId,
-    initialMessages: [],
+    chatId: chatId || "",
   });
 
-  console.log({ messages });
+  const conversationRef = useChatAutoScroll(messages, {
+    enabled: true,
+    behavior: "smooth",
+    offset: 0,
+  });
 
   const handleCreateNewChat = () => {
     createChatMutate(
@@ -81,7 +85,10 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
         isLoading={isLoadingChats}
         onChatDeleted={refetchChats}
       />
-      <div className="flex-1 overflow-y-auto p-6 scrollbar-thin">
+      <div
+        ref={conversationRef}
+        className="flex-1 overflow-y-auto p-6 scrollbar-thin"
+      >
         <ChatInterfaceEmptyConversation
           messages={messages}
           sendMessage={(params) => sendMessage({ ...params, documentId })}

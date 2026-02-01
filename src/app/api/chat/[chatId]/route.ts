@@ -125,7 +125,6 @@ export async function POST(request: NextRequest) {
       }));
 
     const model = getAiModel();
-    // const chatSession = model.startChat({ history: chatHistory });
 
     // Only include history if there are previous messages (excluding the current user message)
     // The current user message will be sent separately via sendMessageStream
