@@ -35,12 +35,12 @@ export default function ChatInterfaceConversation({
           className={cn(
             "relative w-fit max-w-[85%] min-w-0 px-1 py-0 rounded-2xl transition-all duration-200 break-words border-none",
             msg.role === "user"
-              ? "ml-auto bg-secondary text-secondary-foreground rounded-br-md"
-              : "mr-auto bg-transparent text-foreground rounded-bl-md",
+              ? "ml-auto bg-secondary text-secondary-foreground rounded-br-sm"
+              : "mr-auto bg-muted text-foreground rounded-bl-sm",
           )}
         >
           <CardContent className="py-2 px-2">
-            <div className="prose prose-invert max-w-none text-xs leading-relaxed prose-p:my-0 prose-li:my-0 prose-ul:pl-0 prose-ol:pl-0">
+            <div className="prose prose-invert max-w-none text-sm leading-relaxed prose-p:my-0 prose-li:my-0 prose-ul:pl-0 prose-ol:pl-0">
               <ReactMarkdown
                 remarkPlugins={[remarkMath]}
                 rehypePlugins={[rehypeKatex]}

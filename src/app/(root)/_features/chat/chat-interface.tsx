@@ -100,7 +100,7 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
         />
       </div>
 
-      <div className="py-6 xl:px-6 px-3 pt-0 space-y-1">
+      <div className="py-6 xl:px-6 px-3 pt-0 space-y-1 bg-transparent">
         <ChatInterfaceTextArea
           onSend={(params) => sendMessage({ ...params, documentId })}
           isSending={isSending}
