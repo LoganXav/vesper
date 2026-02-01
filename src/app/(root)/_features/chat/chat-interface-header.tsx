@@ -56,7 +56,7 @@ export function ChatInterfaceHeader({
         onClick={onCreateNewChat}
         size="icon"
         variant="ghost"
-        className="rounded-full w-8 h-8"
+        className="rounded-full w-8 h-8 bg-transparent p-0"
       >
         <MessageSquarePlusIcon className="size-4" />
       </Button>
