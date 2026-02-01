@@ -27,6 +27,8 @@ export const useGetChatQuery = ({ chatId }: { chatId: string }) => {
 };
 
 export const useCreateChatMutation = () => {
+  const queryClient = useQueryClient();
+
   const {
     mutate: createChatMutate,
     isPending: createChatPending,
@@ -36,6 +38,11 @@ export const useCreateChatMutation = () => {
       return await postRequest<Chat>({
         endpoint: `${BASE_URL}/`,
         payload: { title },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QueryTagEnums.CHATS],
       });
     },
   });

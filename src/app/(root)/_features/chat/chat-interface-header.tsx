@@ -51,7 +51,7 @@ export function ChatInterfaceHeader({
   };
 
   return (
-    <div className="flex items-center justify-end gap-1 px-4 py-1">
+    <div className="flex items-center justify-end gap-1 px-4 py-1 mr-4">
       <Button
         onClick={onCreateNewChat}
         size="icon"
@@ -74,7 +74,7 @@ export function ChatInterfaceHeader({
                 Loading chats...
               </div>
             ) : chats.length === 0 ? (
-              <div className="p-4 text-sm text-muted-foreground text-center">
+              <div className="p-2 text-sm text-muted-foreground text-center">
                 No chat history
               </div>
             ) : (

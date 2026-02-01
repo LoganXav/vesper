@@ -115,6 +115,10 @@ export async function PUT(request: NextRequest) {
 
     const { content, title } = await request.json();
 
+    if (title && document.isDefault) {
+      throw new HttpError("Cannot edit this document title", 404);
+    }
+
     await updateDocumentHandler({ documentId, userId, content, title });
 
     return NextResponse.json({

@@ -71,7 +71,7 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
 
   useEffect(() => {
     if (!chatId && chatsData?.data?.length) {
-      setChatId(chatsData.data[0].id);
+      setChatId(chatsData?.data[0]?.id);
     }
   }, [chatsData, chatId]);
 
@@ -79,7 +79,7 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
     <div className="relative h-full w-full flex flex-col">
       <ChatInterfaceHeader
         chats={chatsData?.data}
-        currentChatId={chatId || chatsData?.data[0].id}
+        currentChatId={chatId || chatsData?.data[0]?.id}
         onSelectChat={handleSelectChat}
         onCreateNewChat={handleCreateNewChat}
         isLoading={isLoadingChats}

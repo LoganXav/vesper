@@ -75,7 +75,7 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
         },
         onError: (error) => {
           toast.error(
-            "Could not save document. Check your internet connection or contact support.",
+            "Could not save . Check your internet connection or contact support.",
           );
           console.error(error);
         },
@@ -94,9 +94,7 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
           setIsSaved(true);
         },
         onError: (error) => {
-          toast.error(
-            "Could not update title. Check your internet connection or contact support.",
-          );
+          toast.error("Could not update title.");
           console.error(error);
         },
       },
