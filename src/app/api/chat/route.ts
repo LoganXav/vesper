@@ -1,8 +1,8 @@
 import { auth } from "@/lib/auth";
 import { HttpError } from "@/lib/error";
 import { NextRequest, NextResponse } from "next/server";
-import { createChatHandler } from "./handlers/create-chat";
-import { getChatsHandler } from "./handlers/get-chat";
+import { createChatHandler } from "./repository/create-chat";
+import { getChatsHandler } from "./repository/get-chat";
 
 export async function GET() {
   try {

@@ -35,10 +35,10 @@ export function useChat(options: UseChatOptions = {}) {
         status: "default",
       };
 
-      const assistantId = String(Date.now() + 1);
-      const assistantMsg: ChatMessage = {
-        id: assistantId,
-        role: "assistant",
+      const modelId = String(Date.now() + 1);
+      const modelMsg: ChatMessage = {
+        id: modelId,
+        role: "model",
         content: "",
         preview: null,
         status: "default",
@@ -46,8 +46,8 @@ export function useChat(options: UseChatOptions = {}) {
 
       // Add user message immediately
       setMessages((prev) => [...prev, userMsg]);
-      // Add empty assistant message for streaming
-      setMessages((prev) => [...prev, assistantMsg]);
+      // Add empty model message for streaming
+      setMessages((prev) => [...prev, modelMsg]);
       setIsSending(true);
 
       try {
@@ -58,8 +58,7 @@ export function useChat(options: UseChatOptions = {}) {
           },
           body: JSON.stringify({
             message,
-            stream: true,
-            documentId, // Pass documentId in request body
+            documentId,
           }),
         });
 
@@ -78,10 +77,12 @@ export function useChat(options: UseChatOptions = {}) {
           const chunk = decoder.decode(value, { stream: true });
           accumulatedContent += chunk;
 
-          // Update the assistant message with accumulated content
+          console.log({ accumulatedContent });
+
+          // Update the model message with accumulated content
           setMessages((prev) =>
             prev.map((msg) =>
-              msg.id === assistantId
+              msg.id === modelId
                 ? { ...msg, content: accumulatedContent }
                 : msg,
             ),
@@ -95,7 +96,7 @@ export function useChat(options: UseChatOptions = {}) {
             // This is an editing mode response
             setMessages((prev) =>
               prev.map((msg) =>
-                msg.id === assistantId
+                msg.id === modelId
                   ? {
                       ...msg,
                       content: accumulatedContent,
@@ -112,7 +113,7 @@ export function useChat(options: UseChatOptions = {}) {
         console.error("Error sending message:", error);
         setMessages((prev) =>
           prev.map((msg) =>
-            msg.id === assistantId
+            msg.id === modelId
               ? {
                   ...msg,
                   content: "Sorry, I encountered an error. Please try again.",

@@ -1,5 +1,7 @@
+import { Chunk } from "@/types";
 import MarkdownIt from "markdown-it";
 import { StateBlock, StateInline } from "markdown-it/index.js";
+import { createHash } from "crypto";
 
 /**
  * Markdown-it Math Plugin
@@ -203,3 +205,47 @@ export function markdownToHtml(markdown: string): string {
   const normalizedInput = input.replace(/\\\\/g, "\\"); // prevent over-escaping
   return md.render(normalizedInput);
 }
+
+export function generateStableChunkId(content: string) {
+  return createHash("sha1").update(content.trim()).digest("hex").slice(0, 12);
+}
+
+export function parseMarkdownToChunks(markdown: string): Chunk[] {
+  if (!markdown.trim()) return [];
+
+  // Split into blocks by two newlines
+  const rawBlocks = markdown
+    .split(/\n\s*\n/)
+    .map((b) => b.trim())
+    .filter(Boolean);
+
+  const chunks: Chunk[] = rawBlocks.map((block) => {
+    let type: Chunk["type"] = "paragraph";
+
+    if (/^#{1,6}\s+/.test(block)) type = "heading";
+    else if (/^\$[^$]/.test(block) || /^\$\$/.test(block)) type = "math";
+    else if (/^```/.test(block)) type = "code";
+    else if (/^[-*+]\s+/.test(block) || /^\d+\./.test(block)) type = "list";
+
+    return {
+      id: generateStableChunkId(block),
+      type,
+      content: block,
+    };
+  });
+
+  return chunks;
+}
+
+export const buildStructuredContext = (
+  allChunks: { id: string; type: string; content: string }[],
+) => {
+  const contextLines: string[] = [];
+
+  // Try to match multiple nodes within this chunk
+  allChunks.forEach((node) => {
+    contextLines.push(`CHUNK ${node.id} (${node.type}):\n"${node.content}"\n`);
+  });
+
+  return contextLines.join("\n");
+};

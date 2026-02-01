@@ -137,7 +137,7 @@ export function AppSidebar() {
           <SidebarGroupContent className="space-y-1">
             <Button
               variant="ghost"
-              className="bg-transparent pl-2 shadow-none w-full items-center justify-start hover:font-medium hover:text-foreground"
+              className="bg-transparent pl-2 shadow-none w-full items-center justify-start hover:text-foreground"
             >
               <GitHubIcon className="size-4" />
               Give a star on GitHub

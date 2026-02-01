@@ -7,9 +7,15 @@ import { InferSelectModel } from "drizzle-orm";
 export type ChatMessage = {
   id: string;
   status: "used" | "dismissed" | "default";
-  role: "user" | "assistant";
+  role: "user" | "model";
   content: string;
   preview?: { data: string } | null;
+};
+
+export type Chunk = {
+  id: string;
+  type: "paragraph" | "math" | "list" | "code" | "heading";
+  content: string;
 };
 
 export type Chat = InferSelectModel<typeof chats>;

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { ChatInterface } from "./chat-interface";
 
-export const ChatInterfaceMobile = () => {
+export const ChatInterfaceMobile = ({ documentId }: { documentId: string }) => {
   const isMobile = useIsMobile();
   return (
     <>
@@ -28,7 +28,7 @@ export const ChatInterfaceMobile = () => {
                 <DialogTitle>Chat</DialogTitle>
               </VisuallyHidden>
               <div className="bg-card h-full flex flex-col rounded-lg overflow-hidden">
-                <ChatInterface />
+                <ChatInterface documentId={documentId} />
               </div>
             </DialogContent>
           </Dialog>

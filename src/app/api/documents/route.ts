@@ -1,8 +1,8 @@
 import { auth } from "@/lib/auth";
 import { HttpError } from "@/lib/error";
 import { NextRequest, NextResponse } from "next/server";
-import { getDocumentsHandler } from "./handlers/get-document";
-import { createDocumentHandler } from "./handlers/create-document";
+import { getDocumentsHandler } from "./repository/get-document";
+import { createDocumentHandler } from "./repository/create-document";
 
 export async function GET() {
   try {

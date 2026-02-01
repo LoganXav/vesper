@@ -10,10 +10,9 @@ import {
 import { cn } from "@/lib/utils";
 import {
   MessageSquarePlusIcon,
-  TrashIcon,
   HistoryIcon,
   MessageSquareTextIcon,
-  XIcon,
+  TrashIcon,
 } from "lucide-react";
 import { formatRelativeTime } from "@/utils/date-utils";
 import { useDeleteChatMutation } from "@/queries/chat";
@@ -100,10 +99,10 @@ export function ChatInterfaceHeader({
                           : "hover:bg-accent/50",
                       )}
                     >
-                      <XIcon
+                      <TrashIcon
                         size={12}
                         onClick={(e) => handleDeleteChat(e, chat?.id)}
-                        className="hidden group-hover:block bg-secondary rounded-full absolute left-3 transition-all duration-300 ease-out"
+                        className="hidden group-hover:block bg-secondary rounded-full absolute left-3 transition-all duration-300 ease-out hover:text-destructive"
                       />
 
                       <MessageSquareTextIcon

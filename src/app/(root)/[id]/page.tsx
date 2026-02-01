@@ -15,9 +15,9 @@ export default async function DocumentPage({
         <EditorInterface documentId={id} />
       </div>
       <div className="lg:col-span-1 hidden lg:flex h-full bg-sidebar border-l border-border overflow-y-auto">
-        <ChatInterface />
+        <ChatInterface documentId={id} />
       </div>
-      <ChatInterfaceMobile />
+      <ChatInterfaceMobile documentId={id} />
     </div>
   );
 }

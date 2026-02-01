@@ -11,4 +11,6 @@ export const config = {
 
   googleClientId: process.env.AUTH_GOOGLE_ID!,
   googleClientSecret: process.env.AUTH_GOOGLE_SECRET!,
+
+  googleGeminiApiKey: process.env.GOOGLE_GEMINI_API_KEY!,
 };

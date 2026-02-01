@@ -37,6 +37,8 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
     initialMessages: [],
   });
 
+  console.log({ messages });
+
   const handleCreateNewChat = () => {
     createChatMutate(
       { title: "New Chat" },

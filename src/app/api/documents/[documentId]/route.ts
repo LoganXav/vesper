@@ -1,9 +1,9 @@
 import { auth } from "@/lib/auth";
 import { HttpError } from "@/lib/error";
 import { NextRequest, NextResponse } from "next/server";
-import { getDocumentHandler } from "../handlers/get-document";
-import { deleteDocumentHandler } from "../handlers/delete-document";
-import { updateDocumentHandler } from "../handlers/update-document";
+import { getDocumentHandler } from "../repository/get-document";
+import { deleteDocumentHandler } from "../repository/delete-document";
+import { updateDocumentHandler } from "../repository/update-document";
 
 export async function GET(request: NextRequest) {
   try {

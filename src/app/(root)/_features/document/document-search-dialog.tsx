@@ -1,7 +1,12 @@
 "use client";
 
 import { useState, useMemo, ReactElement } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +19,7 @@ import { FileIcon, FilePlusCornerIcon, SearchIcon, XIcon } from "lucide-react";
 import type { Document } from "@/types";
 import { groupDocumentsByDate } from "@/utils/date-utils";
 import { toast } from "sonner";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface DocumentSearchDialogProps {
   children: ReactElement;
@@ -105,6 +111,9 @@ export const DocumentSearchDialog = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="flex max-h-[55vh] flex-col gap-0 overflow-hidden p-0 sm:min-w-2xl scrollbar-thin">
+        <VisuallyHidden>
+          <DialogTitle></DialogTitle>
+        </VisuallyHidden>
         <div className="flex items-center gap-2 border-b px-3 py-2">
           <SearchIcon className="size-4 shrink-0 text-muted-foreground" />
           <Input
