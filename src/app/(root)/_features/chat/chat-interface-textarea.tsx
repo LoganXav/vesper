@@ -92,7 +92,7 @@ export const ChatInterfaceTextArea = ({ onSend, isSending }: Props) => {
   return (
     <>
       {referencedBooks.length > 0 && (
-        <div className="border border-border rounded-lg p-1">
+        <div className="bg-muted rounded-lg p-1">
           <div className="flex gap-1 flex-wrap">
             {referencedBooks.map((book) => (
               <div
