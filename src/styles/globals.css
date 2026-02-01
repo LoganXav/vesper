@@ -181,4 +181,30 @@
   .scrollbar-none::-webkit-scrollbar {
     width: 0;
   }
+
+  /* Cloud fade effect for chat interface - content fades into background */
+  .cloud-fade-top {
+    background: linear-gradient(
+      to bottom,
+      var(--color-sidebar) 0%,
+      var(--color-sidebar) 35%,
+      color-mix(in oklch, var(--color-sidebar) 85%, transparent) 55%,
+      color-mix(in oklch, var(--color-sidebar) 50%, transparent) 75%,
+      color-mix(in oklch, var(--color-sidebar) 20%, transparent) 90%,
+      transparent 100%
+    );
+  }
+
+  .cloud-fade-bottom {
+    background: linear-gradient(
+      to top,
+      var(--color-sidebar) 0%,
+      var(--color-sidebar) 25%,
+      color-mix(in oklch, var(--color-sidebar) 95%, transparent) 45%,
+      color-mix(in oklch, var(--color-sidebar) 70%, transparent) 65%,
+      color-mix(in oklch, var(--color-sidebar) 40%, transparent) 80%,
+      color-mix(in oklch, var(--color-sidebar) 15%, transparent) 92%,
+      transparent 100%
+    );
+  }
 }

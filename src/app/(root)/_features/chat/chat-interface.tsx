@@ -76,31 +76,45 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
   }, [chatsData, chatId]);
 
   return (
-    <div className="relative h-full w-full flex flex-col">
-      <ChatInterfaceHeader
-        chats={chatsData?.data}
-        currentChatId={chatId || chatsData?.data[0]?.id}
-        onSelectChat={handleSelectChat}
-        onCreateNewChat={handleCreateNewChat}
-        isLoading={isLoadingChats}
-        onChatDeleted={refetchChats}
-      />
-      <div
-        ref={conversationRef}
-        className="flex-1 overflow-y-auto p-6 scrollbar-thin"
-      >
-        <ChatInterfaceEmptyConversation
-          messages={messages}
-          sendMessage={(params) => sendMessage({ ...params, documentId })}
-        />
-
-        <ChatInterfaceConversation
-          messages={messages}
-          setMessages={setMessages}
+    <div className="relative h-full w-full flex flex-col bg-sidebar">
+      {/* Header */}
+      <div className="absolute top-0 right-0 z-20 w-min bg-sidebar">
+        <ChatInterfaceHeader
+          chats={chatsData?.data}
+          currentChatId={chatId || chatsData?.data[0]?.id}
+          onSelectChat={handleSelectChat}
+          onCreateNewChat={handleCreateNewChat}
+          isLoading={isLoadingChats}
+          onChatDeleted={refetchChats}
         />
       </div>
 
-      <div className="py-6 xl:px-6 px-3 pt-0 space-y-1 bg-transparent">
+      {/* Conversation area with cloud fade masks */}
+      <div className="relative flex-1 overflow-hidden">
+        {/* Top cloud fade - content disappears into header */}
+        <div className="absolute top-0 left-0 right-0 h-20 z-10 pointer-events-none cloud-fade-top" />
+
+        {/* Bottom cloud fade - content disappears into input area */}
+        <div className="absolute bottom-0 left-0 right-0 h-10 z-10 pointer-events-none cloud-fade-bottom" />
+
+        <div
+          ref={conversationRef}
+          className="h-full overflow-y-auto p-6 scrollbar-thin relative z-0"
+        >
+          <ChatInterfaceEmptyConversation
+            messages={messages}
+            sendMessage={(params) => sendMessage({ ...params, documentId })}
+          />
+
+          <ChatInterfaceConversation
+            messages={messages}
+            setMessages={setMessages}
+          />
+        </div>
+      </div>
+
+      {/* Bottom input area */}
+      <div className="relative z-20 pb-6 xl:px-6 px-3 pt-0 space-y-1 bg-sidebar">
         <ChatInterfaceTextArea
           onSend={(params) => sendMessage({ ...params, documentId })}
           isSending={isSending}
