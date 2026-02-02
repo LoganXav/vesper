@@ -64,7 +64,7 @@ export const LibraryList = () => {
         {books.map((book) => (
           <Card
             key={book.id}
-            className="group overflow-hidden transition-all rounded-md shadow-none hover:bg-accent/50 pt-0 gap-2 cursor-pointer"
+            className="group overflow-hidden transition-all rounded-md shadow-none hover:bg-accent/50 pt-0 pb-4 gap-2 cursor-pointer"
           >
             <CardContent className="p-0">
               <div className="relative h-40 w-full bg-muted">
