@@ -182,7 +182,6 @@
     width: 0;
   }
 
-  /* Background color variants - using CSS variables with mask-image for opacity */
   .cloud-fade-top-bg {
     background: var(--background);
     mask-image: linear-gradient(
@@ -203,6 +202,12 @@
       rgba(0, 0, 0, 0.2) 85%,
       transparent 100%
     );
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-position: center;
   }
 
   .cloud-fade-bottom-bg {
@@ -227,6 +232,12 @@
       rgba(0, 0, 0, 0.15) 92%,
       transparent 100%
     );
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-position: center;
   }
 
   /* Sidebar color variants */
@@ -250,6 +261,12 @@
       rgba(0, 0, 0, 0.2) 85%,
       transparent 100%
     );
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-position: center;
   }
 
   .cloud-fade-bottom-sidebar {
@@ -274,5 +291,11 @@
       rgba(0, 0, 0, 0.15) 92%,
       transparent 100%
     );
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-position: center;
   }
 }
