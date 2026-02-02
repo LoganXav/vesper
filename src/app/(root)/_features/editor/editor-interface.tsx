@@ -2,6 +2,7 @@
 
 import "@/styles/editor.css";
 import { useEffect, useRef, useState } from "react";
+import { useEditorStore } from "@/store/editor-store";
 import { Editor, generateJSON, JSONContent } from "@tiptap/react";
 import { migrateMathStrings } from "@tiptap/extension-mathematics";
 import { EditorInterfaceControls } from "./editor-interface-controls";
@@ -19,11 +20,15 @@ import {
   useUpdateDocumentMutation,
 } from "@/queries/document";
 import { toast } from "sonner";
+import { config } from "@/config";
 
 const EditorInterface = ({ documentId }: { documentId: string }) => {
   const [editor, setEditor] = useState<Editor | null>(null);
   const editorRef = useRef<Editor | null>(null);
   const [isEditable, setIsEditable] = useState(true);
+
+  // subscribes only to setEditor
+  const setEditorGlobal = useEditorStore((s) => s.setEditor);
 
   const { data: documentData, isLoading: isDocumentLoading } =
     useGetDocumentQuery({
@@ -45,8 +50,6 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
   const [isSaved, setIsSaved] = useState(false);
   const [charsCount, setCharsCount] = useState<number | undefined>(undefined);
 
-  const DRAFT_KEY = "vesper:active-draft";
-
   const debouncedEditorUpdate = useDebouncedCallback((editor: Editor) => {
     const json = editor.getJSON();
     setCharsCount(editor.storage.characterCount.words());
@@ -63,7 +66,10 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
       updatedAt: Date.now(),
     };
 
-    window.localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    window.localStorage.setItem(
+      config.localStorageDraftKey,
+      JSON.stringify(draft),
+    );
     updateDocumentMutate(
       {
         documentId,
@@ -113,7 +119,9 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
       ? new Date(documentData.data.updatedAt).getTime()
       : 0;
 
-    const localStorageDraft = window.localStorage.getItem(DRAFT_KEY);
+    const localStorageDraft = window.localStorage.getItem(
+      config.localStorageDraftKey,
+    );
 
     if (localStorageDraft) {
       const draft = JSON.parse(localStorageDraft) as {
@@ -138,16 +146,18 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
   }, [documentData?.data, documentId]);
 
   useEffect(() => {
-    const localStorageDraft = window.localStorage.getItem(DRAFT_KEY);
+    const localStorageDraft = window.localStorage.getItem(
+      config.localStorageDraftKey,
+    );
     if (!localStorageDraft) return;
 
     try {
       const draft = JSON.parse(localStorageDraft);
       if (draft.documentId !== documentId) {
-        window.localStorage.removeItem(DRAFT_KEY);
+        window.localStorage.removeItem(config.localStorageDraftKey);
       }
     } catch {
-      window.localStorage.removeItem(DRAFT_KEY);
+      window.localStorage.removeItem(config.localStorageDraftKey);
     }
   }, [documentId]);
 
@@ -207,6 +217,7 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
         onCreate={({ editor }) => {
           migrateMathStrings(editor);
           setEditor(editor);
+          setEditorGlobal(editor);
         }}
         onUpdate={({ editor }) => {
           debouncedEditorUpdate(editor);
@@ -214,6 +225,7 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
         }}
         onDestroy={() => {
           setEditor(null);
+          setEditorGlobal(null);
         }}
         initialContent={initialContent}
         extensions={extensions}

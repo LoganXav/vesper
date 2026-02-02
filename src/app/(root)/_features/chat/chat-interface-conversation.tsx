@@ -10,6 +10,10 @@ import type { Dispatch, SetStateAction } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import ChatInterfaceConversationPreview from "./chat-interface-conversation-preview";
 import { formatChatMessages } from "@/utils/chat-message-format";
+import { useEditorStore } from "@/store/editor-store";
+import { applyEditsToMarkdown } from "@/utils/markdown-utils";
+import { migrateMathStrings } from "@tiptap/extension-mathematics";
+import { config } from "@/config";
 
 export default function ChatInterfaceConversation({
   messages,
@@ -22,10 +26,40 @@ export default function ChatInterfaceConversation({
     return null;
   }
 
+  // subscribes only to getEditor
+  const editor = useEditorStore((s) => s.getEditor());
+
   const formattedMessages = useMemo(
     () => formatChatMessages(messages),
     [messages],
   );
+
+  const handleApplyEdits = (msg: ChatMessage) => {
+    const edits = msg.edits;
+    if (!editor || !edits) return;
+
+    const currentMarkdown =
+      window.localStorage.getItem(config.localStorageDraftKey) ?? "";
+
+    const currentMarkdownContent = JSON.parse(currentMarkdown).markdown;
+
+    const updatedMarkdown = applyEditsToMarkdown(currentMarkdownContent, edits);
+
+    editor.commands.setContent(updatedMarkdown);
+
+    migrateMathStrings(editor);
+
+    setMessages((prev) =>
+      prev.map((m) =>
+        m.id === msg.id
+          ? {
+              ...m,
+              status: "used",
+            }
+          : m,
+      ),
+    );
+  };
 
   return (
     <div className="flex flex-col gap-6 pb-64 pt-10">
@@ -54,7 +88,7 @@ export default function ChatInterfaceConversation({
                 <ChatInterfaceConversationPreview
                   data={msg.preview.data}
                   status={msg.status}
-                  // onApply={() => handleApplyEdits(msg)}
+                  onApply={() => handleApplyEdits(msg)}
                   onDismiss={() =>
                     setMessages((prev) =>
                       prev.map((m) =>

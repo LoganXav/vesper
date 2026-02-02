@@ -55,16 +55,16 @@ export default function ChatInterfaceConversationPreview({
 
   return (
     <div className="space-y-3">
-      <Card className="bg-secondary border border-border rounded-lg py-3 gap-0">
+      <Card className="bg-secondary border border-border rounded-lg pt-3 gap-0">
         <CardHeader className="px-3 text-xs text-muted-foreground border-b border-border uppercase tracking-wider">
           Preview
         </CardHeader>
 
         <CardContent
           className={cn(
-            "p-3 max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-track-transparent pointer-events-none",
-            status === "used" && "bg-green-900/10",
-            status === "dismissed" && "bg-red-900/10",
+            "p-3 max-h-[500px] overflow-y-scroll scrollbar-thin scrollbar-track-transparent",
+            status === "used" && "bg-green-400/10",
+            status === "dismissed" && "bg-red-400/10",
           )}
         >
           <div
