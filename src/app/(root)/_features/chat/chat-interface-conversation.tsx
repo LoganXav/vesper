@@ -39,9 +39,9 @@ export default function ChatInterfaceConversation({
     if (!editor || !edits) return;
 
     const currentMarkdown =
-      window.localStorage.getItem(config.localStorageDraftKey) ?? "";
+      window.localStorage.getItem(config.localStorageDraftKey) ?? "{}";
 
-    const currentMarkdownContent = JSON.parse(currentMarkdown).markdown;
+    const currentMarkdownContent = JSON.parse(currentMarkdown).markdown ?? "";
 
     const updatedMarkdown = applyEditsToMarkdown(currentMarkdownContent, edits);
 
