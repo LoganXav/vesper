@@ -87,7 +87,7 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
         },
       },
     );
-  }, 3000);
+  }, 1500);
 
   const debouncedTitleUpdate = useDebouncedCallback((newTitle: string) => {
     updateDocumentMutate(
