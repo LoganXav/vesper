@@ -97,7 +97,7 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
 
         <div
           ref={conversationRef}
-          className="h-full overflow-y-auto p-6 scrollbar-thin relative z-0"
+          className="h-full overflow-y-auto pt-16 p-6 scrollbar-thin relative z-0"
         >
           <ChatInterfaceEmptyConversation
             messages={messages}

@@ -162,7 +162,7 @@ export function AppSidebar() {
               <Button
                 variant="outline"
                 onClick={handleSignInWithGoogle}
-                className="bg-transparent shadow-none w-full items-center justify-start"
+                className="bg-transparent shadow-none w-full pl-2 items-center justify-start"
                 disabled={isPending}
               >
                 {isPending ? (
