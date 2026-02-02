@@ -170,10 +170,11 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
           onChange={(e) => {
             handleUpdateTitle(e);
           }}
-          className="p-0 border-none h-auto outline-none overflow-hidden text-ellipsis focus-visible:border-none focus-visible:ring-0 rounded-none max-w-max backdrop-blur-lg rounded-r-full"
+          className="p-0 border-none h-auto outline-none overflow-hidden text-ellipsis focus-visible:border-none focus-visible:ring-0 rounded-none max-w-max"
         />
       </div>
-      <div className="sticky mr-2 sm:mr-4 top-[10px] right-5 z-10 mb-5 flex justify-end gap-2 2xl:opacity-0 2xl:-translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
+
+      <div className="sticky mr-2 sm:mr-4 top-[10px] right-5 z-50 mb-0 flex justify-end gap-2 2xl:opacity-0 2xl:-translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
         {charsCount !== undefined && charsCount !== null && charsCount > 0 && (
           <div className="h-6 rounded-xl bg-secondary border border-border  px-2 py-1 text-xs text-secondary-foreground">
             {charsCount} Words
@@ -191,6 +192,8 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
         )}
       </div>
 
+      <div className="sticky top-0 left-0 right-0 h-18 z-40 pointer-events-none cloud-fade-top-bg" />
+
       {editor && (
         <DragHandle editor={editor}>
           <GripVerticalIcon strokeWidth={1} />
@@ -198,7 +201,7 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
       )}
 
       <EditorContent
-        className="tiptap text-foreground pt-8 xl:px-12"
+        className="tiptap text-foreground pt-0 xl:px-12"
         immediatelyRender={false}
         editable={true}
         onCreate={({ editor }) => {

@@ -182,58 +182,96 @@
     width: 0;
   }
 
-  /* Cloud fade effect for chat interface - content fades into background */
-  /* Using rgba colors for maximum browser compatibility (Arc, Zen, etc.) */
-  .cloud-fade-top {
-    /* Light theme: oklch(0.97 0 0) ≈ rgb(247, 247, 247) */
-    background: linear-gradient(
+  /* Background color variants - using CSS variables with mask-image for opacity */
+  .cloud-fade-top-bg {
+    background: var(--background);
+    mask-image: linear-gradient(
       to bottom,
-      rgb(247, 247, 247) 0%,
-      rgb(247, 247, 247) 30%,
-      rgba(247, 247, 247, 0.85) 50%,
-      rgba(247, 247, 247, 0.5) 70%,
-      rgba(247, 247, 247, 0.2) 85%,
+      black 0%,
+      black 30%,
+      rgba(0, 0, 0, 0.85) 50%,
+      rgba(0, 0, 0, 0.5) 70%,
+      rgba(0, 0, 0, 0.2) 85%,
       transparent 100%
     );
-  }
-
-  .dark .cloud-fade-top {
-    /* Dark theme: oklch(0.12 0 0) ≈ rgb(31, 31, 31) */
-    background: linear-gradient(
+    -webkit-mask-image: linear-gradient(
       to bottom,
-      rgb(31, 31, 31) 0%,
-      rgb(31, 31, 31) 30%,
-      rgba(31, 31, 31, 0.85) 50%,
-      rgba(31, 31, 31, 0.5) 70%,
-      rgba(31, 31, 31, 0.2) 85%,
+      black 0%,
+      black 30%,
+      rgba(0, 0, 0, 0.85) 50%,
+      rgba(0, 0, 0, 0.5) 70%,
+      rgba(0, 0, 0, 0.2) 85%,
       transparent 100%
     );
   }
 
-  .cloud-fade-bottom {
-    /* Light theme */
-    background: linear-gradient(
+  .cloud-fade-bottom-bg {
+    background: var(--background);
+    mask-image: linear-gradient(
       to top,
-      rgb(247, 247, 247) 0%,
-      rgb(247, 247, 247) 25%,
-      rgba(247, 247, 247, 0.95) 45%,
-      rgba(247, 247, 247, 0.7) 65%,
-      rgba(247, 247, 247, 0.4) 80%,
-      rgba(247, 247, 247, 0.15) 92%,
+      black 0%,
+      black 25%,
+      rgba(0, 0, 0, 0.95) 45%,
+      rgba(0, 0, 0, 0.7) 65%,
+      rgba(0, 0, 0, 0.4) 80%,
+      rgba(0, 0, 0, 0.15) 92%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to top,
+      black 0%,
+      black 25%,
+      rgba(0, 0, 0, 0.95) 45%,
+      rgba(0, 0, 0, 0.7) 65%,
+      rgba(0, 0, 0, 0.4) 80%,
+      rgba(0, 0, 0, 0.15) 92%,
       transparent 100%
     );
   }
 
-  .dark .cloud-fade-bottom {
-    /* Dark theme */
-    background: linear-gradient(
+  /* Sidebar color variants */
+  .cloud-fade-top-sidebar {
+    background: var(--sidebar);
+    mask-image: linear-gradient(
+      to bottom,
+      black 0%,
+      black 30%,
+      rgba(0, 0, 0, 0.85) 50%,
+      rgba(0, 0, 0, 0.5) 70%,
+      rgba(0, 0, 0, 0.2) 85%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      black 0%,
+      black 30%,
+      rgba(0, 0, 0, 0.85) 50%,
+      rgba(0, 0, 0, 0.5) 70%,
+      rgba(0, 0, 0, 0.2) 85%,
+      transparent 100%
+    );
+  }
+
+  .cloud-fade-bottom-sidebar {
+    background: var(--sidebar);
+    mask-image: linear-gradient(
       to top,
-      rgb(31, 31, 31) 0%,
-      rgb(31, 31, 31) 25%,
-      rgba(31, 31, 31, 0.95) 45%,
-      rgba(31, 31, 31, 0.7) 65%,
-      rgba(31, 31, 31, 0.4) 80%,
-      rgba(31, 31, 31, 0.15) 92%,
+      black 0%,
+      black 25%,
+      rgba(0, 0, 0, 0.95) 45%,
+      rgba(0, 0, 0, 0.7) 65%,
+      rgba(0, 0, 0, 0.4) 80%,
+      rgba(0, 0, 0, 0.15) 92%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to top,
+      black 0%,
+      black 25%,
+      rgba(0, 0, 0, 0.95) 45%,
+      rgba(0, 0, 0, 0.7) 65%,
+      rgba(0, 0, 0, 0.4) 80%,
+      rgba(0, 0, 0, 0.15) 92%,
       transparent 100%
     );
   }

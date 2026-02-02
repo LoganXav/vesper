@@ -91,11 +91,9 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
 
       {/* Conversation area with cloud fade masks */}
       <div className="relative flex-1 overflow-hidden">
-        {/* Top cloud fade - content disappears into header */}
-        <div className="absolute top-0 left-0 right-0 h-20 z-10 pointer-events-none cloud-fade-top" />
+        <div className="absolute top-0 left-0 right-0 h-20 z-10 pointer-events-none cloud-fade-top-sidebar" />
 
-        {/* Bottom cloud fade - content disappears into input area */}
-        <div className="absolute bottom-0 left-0 right-0 h-10 z-10 pointer-events-none cloud-fade-bottom" />
+        <div className="absolute bottom-0 left-0 right-0 h-8 z-10 pointer-events-none cloud-fade-bottom-sidebar" />
 
         <div
           ref={conversationRef}

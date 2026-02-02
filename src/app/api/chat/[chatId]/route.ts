@@ -8,7 +8,7 @@ import { ChatMessage } from "@/types";
 import { getDocumentHandler } from "../../documents/repository/get-document";
 import { prepareChatContextHandler } from "../handlers/prepare-chat-context";
 import { buildChatPromptHandler } from "../handlers/build-chat-prompt";
-import { getAiModel } from "@/lib/gemini-model";
+import { sendAiMessage } from "../handlers/send-ai-message";
 
 export async function GET(request: NextRequest) {
   try {
@@ -124,35 +124,10 @@ export async function POST(request: NextRequest) {
         parts: [{ text: message.content }],
       }));
 
-    const model = getAiModel();
+    // Remove the last message current user message
+    const previousHistory = chatHistory.slice(0, -1);
 
-    // Only include history if there are previous messages (excluding the current user message)
-    // The current user message will be sent separately via sendMessageStream
-    const previousHistory = chatHistory.slice(0, -1); // Remove the last message (current user message)
-
-    let chatSession;
-    try {
-      chatSession = model.startChat({
-        history: previousHistory.length > 0 ? previousHistory : [],
-      });
-    } catch (error: any) {
-      throw new HttpError(
-        `Failed to start chat session: ${error.message}`,
-        500,
-      );
-    }
-
-    // Send the current prompt as the user message
-    let result;
-    try {
-      result = await chatSession.sendMessageStream(prompt);
-    } catch (error: any) {
-      console.error("Gemini API Error:", error);
-      throw new HttpError(
-        `Failed to send message to AI: ${error.message || "Unknown error"}`,
-        500,
-      );
-    }
+    const result = await sendAiMessage(message, previousHistory, prompt);
 
     let fullModelReply = "";
     const encoder = new TextEncoder();

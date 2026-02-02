@@ -28,7 +28,7 @@ export default function ChatInterfaceConversation({
   );
 
   return (
-    <div className="flex flex-col gap-6 pb-64">
+    <div className="flex flex-col gap-6 pb-64 pt-10">
       {formattedMessages.map((msg) => (
         <Card
           key={msg.id}
