@@ -18,7 +18,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           <div className="w-full relative h-screen">
             <SidebarTrigger
               onClick={() => setOpen(!open)}
-              className="absolute top-2 left-2 z-60"
+              className="absolute top-2 left-2 z-40"
             />
             {children}
             <Toaster position="top-right" />

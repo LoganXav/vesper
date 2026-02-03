@@ -174,7 +174,7 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
 
   return (
     <div className="group relative min-h-full xl:px-6 pt-0 w-full">
-      <div className="sticky top-3 flex items-center  max-w-max gap-3 left-10 border-l pl-3 z-50 2xl:opacity-0 2xl:-translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
+      <div className="sticky top-3 flex items-center max-w-max gap-3 left-10 border-l pl-3 z-40 2xl:opacity-0 2xl:-translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
         <Input
           value={title}
           onChange={(e) => {
@@ -202,7 +202,7 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
         )}
       </div>
 
-      <div className="sticky top-0 left-0 right-0 h-18 z-40 pointer-events-none cloud-fade-top-bg" />
+      <div className="sticky top-0 left-0 right-0 h-18 z-30 pointer-events-none cloud-fade-top-bg" />
 
       {editor && (
         <DragHandle editor={editor}>
