@@ -4,7 +4,7 @@ export const config = {
   authSecret: process.env.AUTH_SECRET!,
 
   databaseUrl:
-    process.env.DATABASE_URL ||
+    process.env.AUTH_DRIZZLE_URL ||
     "postgresql://vesper:vesper@localhost:5432/vesper",
 
   authDrizzleDatabaseUrl: process.env.AUTH_DRIZZLE_URL!,
