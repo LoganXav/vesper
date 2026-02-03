@@ -1,7 +1,8 @@
 import { createHash } from "crypto";
 import MarkdownIt from "markdown-it";
 import { Chunk, ChatMessageEdit } from "@/types";
-import { StateBlock, StateInline } from "markdown-it/index.js";
+import StateBlock from "markdown-it/lib/rules_block/state_block";
+import StateInline from "markdown-it/lib/rules_inline/state_inline";
 
 /**
  * Markdown-it Math Plugin
