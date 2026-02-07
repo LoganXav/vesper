@@ -3,32 +3,13 @@
 import { useEffect, useRef, RefObject } from "react";
 
 interface UseAutoScrollOptions {
-  /**
-   * Whether auto-scroll is enabled
-   */
   enabled?: boolean;
-  /**
-   * Dependencies that trigger scroll when they change
-   */
   dependencies?: unknown[];
-  /**
-   * Behavior for scrolling - 'smooth' or 'instant'
-   */
   behavior?: ScrollBehavior;
-  /**
-   * Offset from bottom (in pixels) to maintain when scrolling
-   */
   offset?: number;
-  /**
-   * Threshold in pixels - only auto-scroll if user is within this distance from bottom
-   */
   threshold?: number;
 }
 
-/**
- * Hook to automatically scroll a container to the bottom when dependencies change
- * Useful for chat interfaces, logs, etc.
- */
 export function useAutoScroll<T extends HTMLElement = HTMLDivElement>(
   options: UseAutoScrollOptions = {},
 ): RefObject<T> {
@@ -94,42 +75,34 @@ export function useAutoScroll<T extends HTMLElement = HTMLDivElement>(
 }
 
 /**
- * Hook specifically for chat interfaces that scrolls on new messages
- * Optimized for streaming responses - uses instant scroll for content updates
+ * Hook specifically for chat interfaces that scrolls only when the user sends a message.
+ * Does not scroll when the model responds (new or streaming).
  */
 export function useChatAutoScroll(
   messages: unknown[],
   options: Omit<UseAutoScrollOptions, "dependencies"> = {},
 ) {
-  const lastMessageCountRef = useRef(0);
-  const lastContentRef = useRef<string>("");
-
-  // Get the last message content for comparison
   const lastMessage = messages[messages.length - 1];
-  const lastContent =
-    lastMessage && typeof lastMessage === "object" && "content" in lastMessage
-      ? String(lastMessage.content)
-      : "";
+  const lastIsUser =
+    lastMessage &&
+    typeof lastMessage === "object" &&
+    "role" in lastMessage &&
+    lastMessage.role === "user";
+  // When user sends, the UI adds user + model placeholder in one update, so last is model "Thinking..."
+  const lastIsPlaceholder =
+    lastMessage &&
+    typeof lastMessage === "object" &&
+    "role" in lastMessage &&
+    lastMessage.role === "model" &&
+    "content" in lastMessage &&
+    String(lastMessage.content) === "Thinking...";
 
-  // Detect if it's a new message or content update to existing message
-  const isNewMessage = messages.length > lastMessageCountRef.current;
-  const isContentUpdate =
-    messages.length === lastMessageCountRef.current &&
-    lastContent !== lastContentRef.current &&
-    lastContent.length > lastContentRef.current.length;
-
-  useEffect(() => {
-    lastMessageCountRef.current = messages.length;
-    lastContentRef.current = lastContent;
-  }, [messages, lastContent]);
+  const shouldScroll =
+    (options.enabled ?? true) && (!!lastIsUser || !!lastIsPlaceholder);
 
   return useAutoScroll({
     ...options,
-    // Use instant scroll for streaming updates (content growing), smooth for new messages
-    behavior:
-      isContentUpdate && !isNewMessage
-        ? "instant"
-        : options.behavior || "smooth",
-    dependencies: [messages.length, lastContent],
+    enabled: shouldScroll,
+    dependencies: [messages.length, lastIsUser, lastIsPlaceholder],
   });
 }
