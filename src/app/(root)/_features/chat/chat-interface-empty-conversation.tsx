@@ -75,7 +75,7 @@ export const ChatInterfaceEmptyConversation = ({
           ) : (
             <GoogleIcon className="size-4" />
           )}
-          Continue with Google
+          Sign in with Google
         </Button>}
     </div>
   );

@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     const userId = session?.user?.id;
 
     if (!userId) {
-      throw new HttpError("Unauthorized", 401);
+      throw new HttpError("Please sign in to create a new document", 401);
     }
 
     const body = await request.json().catch(() => ({}));
