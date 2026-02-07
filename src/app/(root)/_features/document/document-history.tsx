@@ -13,12 +13,14 @@ import { getActiveDocumentPathId } from "@/utils/route-utils";
 import { Button } from "@/components/ui/button";
 import { ConfirmationDialog } from "@/components/wrappers/confirmation-dialog";
 import { toast } from "sonner";
+import { Session } from "next-auth";
 
-export const DocumentHistory = () => {
+export const DocumentHistory = ( {session}: {session: Session | null}) => {
+  
   const router = useRouter();
   const pathname = usePathname();
 
-  const documentsQueryResult = useGetDocumentsQuery();
+  const documentsQueryResult = useGetDocumentsQuery(!!session?.user);
   const documents = documentsQueryResult?.data?.data;
 
   const { deleteDocumentMutate, deleteDocumentPending } =

@@ -10,7 +10,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 const BASE_URL = "documents";
 
-export const useGetDocumentsQuery = () => {
+export const useGetDocumentsQuery = (enabled: boolean) => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [QueryTagEnums.DOCUMENTS],
     queryFn: async () => {
@@ -18,7 +18,9 @@ export const useGetDocumentsQuery = () => {
         endpoint: `${BASE_URL}/`,
       });
     },
+    enabled: !!enabled,
   });
+
 
   return { data, isLoading, error, refetch };
 };

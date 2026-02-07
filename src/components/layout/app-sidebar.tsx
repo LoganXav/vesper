@@ -113,7 +113,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Documents</SidebarGroupLabel>
           <SidebarGroupContent>
-            <DocumentHistory />
+            <DocumentHistory session={session} />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
