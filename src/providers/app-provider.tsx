@@ -8,7 +8,7 @@ import QueryClientContextProvider from "./query-client-provider";
 import { Toaster } from "sonner";
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   return (
     <QueryClientContextProvider>
@@ -18,7 +18,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           <div className="w-full relative h-screen">
             <SidebarTrigger
               onClick={() => setOpen(!open)}
-              className="absolute top-2 left-2 z-40"
+              className="absolute top-2 left-2 z-50"
             />
             {children}
             <Toaster position="top-right" />

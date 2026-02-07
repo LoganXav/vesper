@@ -6,6 +6,7 @@ import { useEditorStore } from "@/store/editor-store";
 import { Editor, generateJSON, JSONContent } from "@tiptap/react";
 import { migrateMathStrings } from "@tiptap/extension-mathematics";
 import { EditorInterfaceControls } from "./editor-interface-controls";
+import { EditorInterfaceControlsMobile } from "./editor-interface-controls-mobile";
 
 import { InitialContent } from "@/types";
 import { Input } from "@/components/ui/input";
@@ -293,7 +294,7 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
 
   return (
     <div className="group relative min-h-full xl:px-6 pt-0 w-full">
-      <div className="sticky top-3 flex items-center max-w-max gap-3 left-10 border-l pl-3 z-40 2xl:opacity-0 2xl:-translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
+      <div className="hidden xl:flex sticky top-3 items-center max-w-max gap-3 left-10 border-l pl-3 z-40 2xl:opacity-0 2xl:-translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
         <Input
           value={title}
           onChange={(e) => {
@@ -303,7 +304,7 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
         />
       </div>
 
-      <div className="sticky mr-2 sm:mr-4 top-[10px] right-5 z-50 mb-0 flex justify-end gap-2 2xl:opacity-0 2xl:-translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
+      <div className="hidden md:flex sticky mr-2 sm:mr-4 top-[10px] right-5 z-49 mb-0 flex justify-end gap-2 2xl:opacity-0 2xl:-translate-y-2 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
         {charsCount !== undefined && charsCount !== null && charsCount > 0 && (
           <div className="h-6 rounded-xl bg-secondary border border-border  px-2 py-1 text-xs text-secondary-foreground">
             {charsCount} Words
@@ -313,13 +314,21 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
           {isSaved ? <FileCheckIcon size={16} /> : <FileClockIcon size={16} />}
         </div>
         {editor && (
-          <EditorInterfaceControls
-            editor={editor}
-            isEditable={isEditable}
-            setIsEditable={setIsEditable}
-          />
+            <EditorInterfaceControls
+              editor={editor}
+              isEditable={isEditable}
+              setIsEditable={setIsEditable}
+            />
         )}
       </div>
+
+      {editor && (
+        <EditorInterfaceControlsMobile
+          editor={editor}
+          isEditable={isEditable}
+          setIsEditable={setIsEditable}
+        />
+      )}
 
       <div className="sticky top-0 left-0 right-0 h-18 z-30 pointer-events-none cloud-fade-top-bg" />
 
