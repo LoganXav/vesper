@@ -97,15 +97,16 @@ export function AppSidebar() {
               </div>
             </DocumentSearchDialog>
             <div
-              className={cn(
+              className={cn("relative group",
                 menuItemClass,
                 pathname === Routes.LIBRARY &&
                 "bg-accent text-accent-foreground font-medium",
               )}
-              onClick={() => router.push(Routes.LIBRARY)}
+            // onClick={() => router.push(Routes.LIBRARY)}
             >
               <LibraryBigIcon className="size-4" />
               Library
+              <div className="absolute top-1/2 -translate-y-1/2 right-2 px-3 rounded-md text-[9px] py-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200">Coming soon</div>
             </div>
           </SidebarGroupContent>
         </SidebarGroup>

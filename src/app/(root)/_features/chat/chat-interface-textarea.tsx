@@ -41,7 +41,7 @@ export const ChatInterfaceTextArea = ({ onSend, isSending }: Props) => {
       icon: Link2Icon,
       label: "Reference book",
     },
-    { icon: SparklesIcon, label: "Generate" },
+    // { icon: SparklesIcon, label: "Generate" },
   ];
 
   const allBooks = [
@@ -130,6 +130,7 @@ export const ChatInterfaceTextArea = ({ onSend, isSending }: Props) => {
                 <PopoverTrigger asChild>
                   <Button
                     type="button"
+                    disabled
                     size="sm"
                     variant="ghost"
                     className="h-7 shrink-0 rounded-full text-xs border border-border"
@@ -185,6 +186,7 @@ export const ChatInterfaceTextArea = ({ onSend, isSending }: Props) => {
           return (
             <Button
               key={action.label}
+              disabled
               type="button"
               size="sm"
               variant="ghost"
