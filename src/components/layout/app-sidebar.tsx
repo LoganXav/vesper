@@ -72,23 +72,24 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader>
+      <SidebarHeader className="pb-0 space-y-3">
         <div className="text-lg font-bold flex items-center gap-2">
           VesperAI <AudioWaveformIcon className="size-4" />
         </div>
+        <Button
+          variant="ghost"
+          className={cn(menuItemClass)}
+          onClick={handleCreateDocument}
+          disabled={createDocumentPending}
+        >
+          <FilePlusCornerIcon className="size-4" />
+          New Document
+        </Button>
       </SidebarHeader>
       <SidebarContent className="scrollbar-thin">
-        <SidebarGroup>
-          <SidebarGroupContent className="flex flex-col gap-1 mt-4">
-            <Button
-              variant="ghost"
-              className={cn(menuItemClass)}
-              onClick={handleCreateDocument}
-              disabled={createDocumentPending}
-            >
-              <FilePlusCornerIcon className="size-4" />
-              New Document
-            </Button>
+        <SidebarGroup className="pt-0">
+          <SidebarGroupContent className="flex flex-col gap-1 mt-0">
+
             <DocumentSearchDialog session={session}>
               <div className={menuItemClass}>
                 <FileSearchCorner className="size-4" />
@@ -99,7 +100,7 @@ export function AppSidebar() {
               className={cn(
                 menuItemClass,
                 pathname === Routes.LIBRARY &&
-                  "bg-accent text-accent-foreground font-medium",
+                "bg-accent text-accent-foreground font-medium",
               )}
               onClick={() => router.push(Routes.LIBRARY)}
             >
@@ -110,11 +111,13 @@ export function AppSidebar() {
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Documents</SidebarGroupLabel>
-          <SidebarGroupContent>
+          <SidebarGroupContent className="relative">
             <DocumentHistory session={session} />
+            <div className="sticky bottom-0 left-0 right-0 h-8 z-10 pointer-events-none cloud-fade-bottom-sidebar" />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
       <SidebarFooter className="mb-4 p-0">
         <SidebarGroup className="flex flex-col gap-2">
           {session?.user && (
@@ -136,9 +139,16 @@ export function AppSidebar() {
             <Button
               variant="ghost"
               className="bg-transparent pl-2 shadow-none w-full items-center justify-start hover:text-foreground"
+              asChild
             >
-              <GitHubIcon className="size-4" />
-              Give a star on GitHub
+              <a
+                href="https://github.com/LoganXav/vesper"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <GitHubIcon className="size-4" />
+                Give a star on GitHub
+              </a>
             </Button>
 
             {session?.user ? (

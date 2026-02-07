@@ -14,6 +14,8 @@ import {
 } from "@/queries/chat";
 import { ChatMessage } from "@/types";
 import { useSession } from "next-auth/react";
+import { cn } from "@/lib/utils";
+import { useChatInterfaceResolution } from "@/hooks/use-chat-interface-resolution";
 
 interface ChatInterfaceProps {
   documentId?: string;
@@ -21,7 +23,7 @@ interface ChatInterfaceProps {
 
 export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
   const [chatId, setChatId] = useState<string | undefined>();
-  const {data: session} = useSession();
+  const { data: session } = useSession();
 
   const { createChatMutate } = useCreateChatMutation();
 
@@ -47,7 +49,7 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
 
   const handleCreateNewChat = () => {
     createChatMutate(
-      { title: "New Chat" },
+      { title: "Untitled Chat" },
       {
         onSuccess: (response) => {
           if (response?.data?.id) {
@@ -77,10 +79,24 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
     }
   }, [chatsData, chatId]);
 
+
+  const {
+    isReady,
+    session: resolvedSession,
+    isAuthenticated,
+  } = useChatInterfaceResolution({
+    session,
+    chatId,
+    isLoadingChats,
+    chatData,
+    delayMs: 120,
+  });
+
+
   return (
     <div className="relative h-full w-full flex flex-col bg-sidebar">
       {/* Header */}
-      <div className="absolute top-0 right-0 z-20 w-min bg-sidebar">
+      {!!session?.user && <div className="absolute top-0 right-0 z-20 w-min bg-sidebar">
         <ChatInterfaceHeader
           chats={chatsData?.data}
           currentChatId={chatId || chatsData?.data[0]?.id}
@@ -89,7 +105,7 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
           isLoading={isLoadingChats}
           onChatDeleted={refetchChats}
         />
-      </div>
+      </div>}
 
       {/* Conversation area with cloud fade masks */}
       <div className="relative flex-1 overflow-hidden">
@@ -99,22 +115,41 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
 
         <div
           ref={conversationRef}
-          className="h-full overflow-y-auto pt-16 p-6 scrollbar-thin relative z-0"
+          className={cn(
+            "h-full overflow-y-auto pt-16 p-6 scrollbar-thin relative z-0 transition-opacity duration-200",
+            isReady ? "opacity-100" : "opacity-0"
+          )}
         >
-          <ChatInterfaceEmptyConversation
-            messages={messages}
-            sendMessage={(params) => sendMessage({ ...params, documentId })}
-          />
-
-          <ChatInterfaceConversation
-            messages={messages}
-            setMessages={setMessages}
-          />
+          {isReady && (
+            isAuthenticated ? (
+              messages.length === 0 ? (
+                <ChatInterfaceEmptyConversation
+                  session={resolvedSession}
+                  sendMessage={(params) =>
+                    sendMessage({ ...params, documentId })
+                  }
+                />
+              ) : (
+                <ChatInterfaceConversation
+                  messages={messages}
+                  setMessages={setMessages}
+                />
+              )
+            ) : (
+              <ChatInterfaceEmptyConversation
+                session={null}
+                sendMessage={() => Promise.resolve()}
+              />
+            )
+          )}
         </div>
+
+
+
       </div>
 
       {/* Bottom input area */}
-      <div className="relative z-20 pb-6 xl:px-6 px-3 pt-0 space-y-1 bg-sidebar">
+      {!!session?.user && <div className="relative z-20 pb-6 xl:px-6 px-3 pt-0 space-y-1 bg-sidebar">
         <ChatInterfaceTextArea
           onSend={(params) => sendMessage({ ...params, documentId })}
           isSending={isSending}
@@ -126,7 +161,7 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
             Logan
           </span>
         </p>
-      </div>
+      </div>}
     </div>
   );
 };
