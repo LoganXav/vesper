@@ -5,23 +5,25 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const BASE_URL = "chat";
 
-export const useGetChatsQuery = () => {
+export const useGetChatsQuery = (enabled: boolean) => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [QueryTagEnums.CHATS],
     queryFn: async () => {
       return await getRequest<Chat[]>({ endpoint: `${BASE_URL}/` });
     },
+    enabled: !!enabled,
   });
 
   return { data, isLoading, error, refetch };
 };
 
-export const useGetChatQuery = ({ chatId }: { chatId: string }) => {
+export const useGetChatQuery = ({ chatId }: { chatId: string }, enabled: boolean) => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [QueryTagEnums.CHATS, chatId],
     queryFn: async () => {
       return await getRequest<Chat>({ endpoint: `${BASE_URL}/${chatId}` });
     },
+    enabled: !!enabled,
   });
   return { data, isLoading, error, refetch };
 };

@@ -13,6 +13,7 @@ import {
   useGetChatsQuery,
 } from "@/queries/chat";
 import { ChatMessage } from "@/types";
+import { useSession } from "next-auth/react";
 
 interface ChatInterfaceProps {
   documentId?: string;
@@ -20,6 +21,7 @@ interface ChatInterfaceProps {
 
 export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
   const [chatId, setChatId] = useState<string | undefined>();
+  const {data: session} = useSession();
 
   const { createChatMutate } = useCreateChatMutation();
 
@@ -27,11 +29,11 @@ export const ChatInterface = ({ documentId }: ChatInterfaceProps) => {
     data: chatsData,
     isLoading: isLoadingChats,
     refetch: refetchChats,
-  } = useGetChatsQuery();
+  } = useGetChatsQuery(!!session?.user);
 
   const { data: chatData } = useGetChatQuery({
     chatId: chatId || "",
-  });
+  }, !!session?.user);
 
   const { messages, sendMessage, isSending, setMessages } = useChat({
     chatId: chatId || "",
