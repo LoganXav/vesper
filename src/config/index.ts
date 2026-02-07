@@ -1,3 +1,5 @@
+import { Routes } from "./route-enums";
+
 export const config = {
   baseUrl: process.env.NEXT_PUBLIC_BASE_URL!,
   isProduction: process.env.NODE_ENV === "production",
@@ -14,5 +16,8 @@ export const config = {
 
   googleGeminiApiKey: process.env.GOOGLE_GEMINI_API_KEY!,
 
-  localStorageDraftKey: "vesper:active-draft",
+  localStorageDraftKey: "vesper:online-draft",
+  localStorageOfflineDocumentDraftKey: "vesper:offline-document-draft",
+
+  offlineDocumentId: Routes.OFFLINE_DOCUMENT.split("/")[1],
 };

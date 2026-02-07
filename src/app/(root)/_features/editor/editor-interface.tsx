@@ -18,17 +18,26 @@ import { FileCheckIcon, GripVerticalIcon, FileClockIcon } from "lucide-react";
 import {
   useGetDocumentQuery,
   useUpdateDocumentMutation,
+  useCreateDocumentMutation,
 } from "@/queries/document";
 import { toast } from "sonner";
 import { config } from "@/config";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { OfflineDocumentDraft } from "@/types";
+
+
+const isOfflineDocument = (id: string) => id === config.offlineDocumentId;
 
 const EditorInterface = ({ documentId }: { documentId: string }) => {
   const [editor, setEditor] = useState<Editor | null>(null);
   const editorRef = useRef<Editor | null>(null);
   const [isEditable, setIsEditable] = useState(true);
+  const hasMigratedRef = useRef(false);
 
-  // subscribes only to setEditor
   const setEditorGlobal = useEditorStore((s) => s.setEditor);
+  const { data: session } = useSession();
+  const router = useRouter();
 
   const { data: documentData, isLoading: isDocumentLoading } =
     useGetDocumentQuery({
@@ -37,6 +46,7 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
 
   const [title, setTitle] = useState("");
   const { updateDocumentMutate } = useUpdateDocumentMutation();
+  const { createDocumentMutate } = useCreateDocumentMutation();
 
   useEffect(() => {
     if (documentData?.data?.title) {
@@ -57,12 +67,28 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
     const markdownStorage = (editor.storage as any).markdown as
       | { getMarkdown: () => string }
       | undefined;
+    const markdown = markdownStorage?.getMarkdown();
+
+    if (isOfflineDocument(documentId)) {
+      const draft: OfflineDocumentDraft = {
+        json,
+        markdown,
+        title: title || "Untitled Document",
+        updatedAt: Date.now(),
+      };
+      window.localStorage.setItem(
+        config.localStorageOfflineDocumentDraftKey,
+        JSON.stringify(draft),
+      );
+      setIsSaved(true);
+      return;
+    }
 
     const draft = {
       documentId,
       json,
       html: editor.getHTML(),
-      markdown: markdownStorage?.getMarkdown(),
+      markdown,
       updatedAt: Date.now(),
     };
 
@@ -73,15 +99,13 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
     updateDocumentMutate(
       {
         documentId,
-        content: markdownStorage?.getMarkdown(),
+        content: markdown,
       },
       {
-        onSuccess: () => {
-          setIsSaved(true);
-        },
+        onSuccess: () => setIsSaved(true),
         onError: (error) => {
           toast.error(
-            "Could not save . Check your internet connection or contact support.",
+            "Could not save. Check your internet connection or contact support.",
           );
           console.error(error);
         },
@@ -90,19 +114,29 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
   }, 1500);
 
   const debouncedTitleUpdate = useDebouncedCallback((newTitle: string) => {
+    if (isOfflineDocument(documentId)) {
+      const raw = window.localStorage.getItem(
+        config.localStorageOfflineDocumentDraftKey,
+      );
+      const draft: OfflineDocumentDraft = raw
+        ? { ...JSON.parse(raw), title: newTitle, updatedAt: Date.now() }
+        : { json: { type: "doc", content: [] }, title: newTitle, updatedAt: Date.now() };
+      window.localStorage.setItem(
+        config.localStorageOfflineDocumentDraftKey,
+        JSON.stringify(draft),
+      );
+      setIsSaved(true);
+      return;
+    }
+
     updateDocumentMutate(
       {
         documentId,
         title: newTitle,
       },
       {
-        onSuccess: () => {
-          setIsSaved(true);
-        },
-        onError: (error) => {
-          toast.error("Could not update title.");
-          console.error(error);
-        },
+        onSuccess: () => setIsSaved(true),
+        onError: () => toast.error("Could not update title."),
       },
     );
   }, 1000);
@@ -112,7 +146,24 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
   }, [editor]);
 
   useEffect(() => {
-    if (!documentData?.data) return;
+    if (!isOfflineDocument(documentId)) return;
+
+    const raw = window.localStorage.getItem(config.localStorageOfflineDocumentDraftKey);
+    if (raw) {
+      try {
+        const draft = JSON.parse(raw) as OfflineDocumentDraft;
+        setInitialContent(draft.json ?? { type: "doc", content: [] });
+        setTitle(draft.title ?? "Untitled");
+      } catch {
+        setInitialContent({ type: "doc", content: [] });
+      }
+    } else {
+      setInitialContent({ type: "doc", content: [] });
+    }
+  }, [documentId]);
+
+  useEffect(() => {
+    if (isOfflineDocument(documentId) || !documentData?.data) return;
 
     const serverDocumentMarkdown = documentData.data.content || "";
     const serverUpdatedAt = documentData.data.updatedAt
@@ -145,7 +196,10 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
     setInitialContent(json);
   }, [documentData?.data, documentId]);
 
+  // Clear per-document draft when switching to a different document (not for local)
   useEffect(() => {
+    if (isOfflineDocument(documentId)) return;
+
     const localStorageDraft = window.localStorage.getItem(
       config.localStorageDraftKey,
     );
@@ -161,6 +215,69 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
     }
   }, [documentId]);
 
+  // When user authenticates while on local draft: create document and redirect
+  useEffect(() => {
+    if (
+      !session?.user ||
+      !isOfflineDocument(documentId) ||
+      hasMigratedRef.current
+    )
+      return;
+
+    const raw = window.localStorage.getItem(config.localStorageOfflineDocumentDraftKey);
+    if (!raw) return;
+
+    let draft: OfflineDocumentDraft;
+    try {
+      draft = JSON.parse(raw);
+    } catch {
+      return;
+    }
+
+    const hasContent =
+      (draft.markdown && draft.markdown.trim() !== "") ||
+      (draft.json?.content && draft.json.content.length > 0);
+
+    if (!hasContent) return;
+
+    hasMigratedRef.current = true;
+
+    createDocumentMutate(
+      { title: draft.title?.trim() || "Untitled Document" },
+      {
+        onSuccess: (result: { data?: { id: string } }) => {
+          const newId = result?.data?.id;
+          if (!newId) return;
+
+          const docTitle = draft.title?.trim() || "Untitled";
+          updateDocumentMutate(
+            {
+              documentId: newId,
+              title: docTitle,
+              content: draft.markdown ?? "",
+            },
+            {
+              onSuccess: () => {
+                window.localStorage.removeItem(
+                  config.localStorageOfflineDocumentDraftKey,
+                );
+                router.replace("/" + newId);
+              },
+              onError: () => {
+                hasMigratedRef.current = false;
+                toast.error("Document created but content could not be saved.");
+              },
+            },
+          );
+        },
+        onError: () => {
+          hasMigratedRef.current = false;
+          toast.error("Could not create document.");
+        },
+      },
+    );
+  }, [session?.user, documentId, createDocumentMutate, updateDocumentMutate, router]);
+
   const handleUpdateTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     setTitle(newTitle);
@@ -168,7 +285,9 @@ const EditorInterface = ({ documentId }: { documentId: string }) => {
     debouncedTitleUpdate(newTitle);
   };
 
-  const isEditorReady = initialContent !== null && !isDocumentLoading;
+  const isEditorReady =
+    initialContent !== null &&
+    (isOfflineDocument(documentId) || !isDocumentLoading);
 
   if (!isEditorReady) return null;
 

@@ -57,11 +57,11 @@ export async function POST(request: NextRequest) {
       throw new HttpError("Title is required", 400);
     }
 
-    await createDocumentHandler({ title, userId });
+    const document = await createDocumentHandler({ title, userId });
 
     return NextResponse.json({
       result: {
-        data: { success: true },
+        data: document,
         message: "Document created successfully",
       },
     });

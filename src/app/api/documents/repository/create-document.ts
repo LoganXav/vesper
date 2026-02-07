@@ -9,10 +9,11 @@ export const createDocumentHandler = async ({
   userId: string;
 }) => {
   try {
-    const document = await database
+    const [created] = await database
       .insert(documents)
-      .values({ title, userId, isDefault: false });
-    return document;
+      .values({ title, userId, isDefault: false })
+      .returning();
+    return created;
   } catch (error) {
     throw error;
   }

@@ -25,7 +25,13 @@ export const useGetDocumentsQuery = (enabled: boolean) => {
   return { data, isLoading, error, refetch };
 };
 
-export const useGetDocumentQuery = ({ documentId }: { documentId: string }) => {
+export const useGetDocumentQuery = ({
+  documentId,
+  enabled = true,
+}: {
+  documentId: string;
+  enabled?: boolean;
+}) => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [QueryTagEnums.DOCUMENTS, documentId],
     queryFn: async () => {
@@ -33,6 +39,7 @@ export const useGetDocumentQuery = ({ documentId }: { documentId: string }) => {
         endpoint: `${BASE_URL}/${documentId}`,
       });
     },
+    enabled: enabled && documentId !== "local",
   });
 
   return { data, isLoading, error, refetch };

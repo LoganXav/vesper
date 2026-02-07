@@ -26,6 +26,13 @@ export type Chunk = {
   content: string;
 };
 
+export type OfflineDocumentDraft = {
+  json: JSONContent;
+  markdown?: string;
+  title?: string;
+  updatedAt: number;
+};
+
 export type Chat = InferSelectModel<typeof chats>;
 
 export type InitialContent = JSONContent | null;

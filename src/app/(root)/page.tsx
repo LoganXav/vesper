@@ -7,9 +7,15 @@ import { getMostRecentDocumentHandler } from "@/app/api/documents/repository/get
 export default async function RedirectToEditor() {
   const session = await auth();
 
+  if (!session?.user?.id) {
+    redirect(config.baseUrl + Routes.HOME + config.offlineDocumentId);
+  }
+
   const mostRecentDocument = await getMostRecentDocumentHandler({
-    userId: session?.user?.id || "",
+    userId: session.user.id,
   });
 
-  redirect(config.baseUrl + Routes.HOME + mostRecentDocument?.id);
+  redirect(
+    config.baseUrl + Routes.HOME + (mostRecentDocument?.id ?? config.offlineDocumentId)
+  );
 }

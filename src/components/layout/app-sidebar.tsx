@@ -62,10 +62,8 @@ export function AppSidebar() {
     });
   };
 
-  const handleSignOut = async () => {
-    startTransition(() => {
-      signOut();
-    });
+  const handleSignOut = () => {
+    signOut({ callbackUrl: Routes.OFFLINE_DOCUMENT });
   };
 
   const menuItemClass = cn(
