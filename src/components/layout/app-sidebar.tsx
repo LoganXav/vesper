@@ -91,7 +91,7 @@ export function AppSidebar() {
               <FilePlusCornerIcon className="size-4" />
               New Document
             </Button>
-            <DocumentSearchDialog>
+            <DocumentSearchDialog session={session}>
               <div className={menuItemClass}>
                 <FileSearchCorner className="size-4" />
                 Search Documents

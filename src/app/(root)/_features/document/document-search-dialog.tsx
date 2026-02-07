@@ -20,9 +20,11 @@ import type { Document } from "@/types";
 import { groupDocumentsByDate } from "@/utils/date-utils";
 import { toast } from "sonner";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { Session } from "next-auth";
 
 interface DocumentSearchDialogProps {
   children: ReactElement;
+  session: Session | null;
 }
 
 const documentItemClass =
@@ -61,6 +63,7 @@ function DocumentSection({
 
 export const DocumentSearchDialog = ({
   children,
+  session,
 }: DocumentSearchDialogProps) => {
   const router = useRouter();
 
@@ -85,7 +88,7 @@ export const DocumentSearchDialog = ({
     );
   };
 
-  const { data, isLoading } = useGetDocumentsQuery();
+  const { data, isLoading } = useGetDocumentsQuery(!!session?.user);
   const documents = data?.data ?? [];
 
   const { today, previous7Days } = useMemo(() => {
