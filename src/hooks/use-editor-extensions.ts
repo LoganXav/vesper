@@ -12,7 +12,7 @@ export const useEditorExtensions = (editorRef: RefObject<Editor | null>) => {
   const extensions = [
     StarterKit.configure({ codeBlock: false }),
     Placeholder.configure({
-      placeholder: "Start creating your notes. Press '/' for quick commands.",
+      placeholder: "Start creating your notes...",
     }),
     Math.configure({
       blockOptions: {
