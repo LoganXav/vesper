@@ -82,7 +82,7 @@ export const ChatInterfaceEmptyConversation = ({
 };
 
 const defaultPrompts = [
-  "Generate a short math quiz",
-  "Help me write a story",
-  "Explain a concept",
+  "Explain what a black hole is in simple terms.",
+  "Write a short paragraph about the taste of lemon tea.",
+  "Describe a peaceful morning in a forest with vivid details."
 ];

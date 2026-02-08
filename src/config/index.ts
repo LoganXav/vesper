@@ -16,6 +16,8 @@ export const config = {
 
   googleGeminiApiKey: process.env.GOOGLE_GEMINI_API_KEY!,
 
+  claudeApiKey: process.env.CLAUDE_API_KEY!,
+
   localStorageDraftKey: "vesper:online-draft",
   localStorageOfflineDocumentDraftKey: "vesper:offline-document-draft",
 

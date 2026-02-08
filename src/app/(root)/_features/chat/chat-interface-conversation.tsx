@@ -26,6 +26,8 @@ export default function ChatInterfaceConversation({
     return null;
   }
 
+  console.log({ messages });
+
   // subscribes only to getEditor
   const editor = useEditorStore((s) => s.getEditor());
 
@@ -53,9 +55,9 @@ export default function ChatInterfaceConversation({
       prev.map((m) =>
         m.id === msg.id
           ? {
-              ...m,
-              status: "used",
-            }
+            ...m,
+            status: "used",
+          }
           : m,
       ),
     );

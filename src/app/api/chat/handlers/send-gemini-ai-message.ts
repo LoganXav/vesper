@@ -1,7 +1,7 @@
 import { HttpError } from "@/lib/error";
 import { getAiModel } from "@/lib/gemini-model";
 
-export const sendAiMessage = async (
+export const sendGeminiAiMessage = async (
   message: string,
   previousHistory: any[],
   prompt: string,

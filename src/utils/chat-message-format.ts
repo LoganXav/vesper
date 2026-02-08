@@ -34,12 +34,18 @@ export function formatChatMessage(message: ChatMessage): ChatMessage {
   // Try to parse as JSON
   let data: { summary?: string; edits?: ChatMessageEdit[] } | null = null;
 
+
+
+
   try {
     data = JSON.parse(text);
   } catch {
     // If parsing fails, treat as plain text
     return message;
   }
+
+  console.log({ text, data });
+
 
   // Check if it's an editing mode response
   if (data && (data.summary !== undefined || data.edits)) {

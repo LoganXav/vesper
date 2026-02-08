@@ -7,8 +7,9 @@ import { deleteChatHandler } from "../repository/delete-chat";
 import { ChatMessage } from "@/types";
 import { getDocumentHandler } from "../../documents/repository/get-document";
 import { prepareChatContextHandler } from "../handlers/prepare-chat-context";
-import { buildChatPromptHandler } from "../handlers/build-chat-prompt";
-import { sendAiMessage } from "../handlers/send-ai-message";
+import { buildClaudeChatPromptHandler } from "../handlers/build-chat-prompt";
+import { sendClaudeAiMessage } from "../handlers/send-claude-ai-message";
+// import { sendGeminiAiMessage } from "../handlers/send-gemini-ai-message";
 
 export async function GET(request: NextRequest) {
   try {
@@ -111,7 +112,7 @@ export async function POST(request: NextRequest) {
       documentContent: document.content || "",
     });
 
-    const prompt = buildChatPromptHandler({
+    const { prompt, systemInstruction } = buildClaudeChatPromptHandler({
       structuredContext,
       allChunkIds,
       message,
@@ -127,7 +128,8 @@ export async function POST(request: NextRequest) {
     // Remove the last message current user message
     const previousHistory = chatHistory.slice(0, -1);
 
-    const result = await sendAiMessage(message, previousHistory, prompt);
+    const result = await sendClaudeAiMessage(systemInstruction, previousHistory, prompt)
+    // const result = await sendGeminiAiMessage(message, previousHistory, prompt)
 
     let fullModelReply = "";
     const encoder = new TextEncoder();
